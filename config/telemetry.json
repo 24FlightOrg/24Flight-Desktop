@@ -1,0 +1,4 @@
+{
+  "rate_hz": 10,
+  "fields": ["altitude", "heading"]
+}

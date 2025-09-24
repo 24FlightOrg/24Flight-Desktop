@@ -1,0 +1,4 @@
+{
+  "pid": { "kp": 1.0, "ki": 0.1, "kd": 0.01 },
+  "setpoints": { "altitude": 1000, "heading": 90 }
+}
