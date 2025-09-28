@@ -1,39 +1,48 @@
-import { app, BrowserWindow } from 'electron';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { app, BrowserWindow, Menu, ipcMain } from 'electron';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
 
-let mainWindow;
-
-const createWindow = () => {
-  mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 800,
-    webPreferences: {
-      preload: join(__dirname, 'preload.js'),
-    },
-  });
-
-  if (process.env.VITE_DEV_SERVER_URL) {
-    // Vite sets this when running dev
-    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
-    mainWindow.webContents.openDevTools();
-  } else {
-    // Production build
-    mainWindow.loadFile(join(__dirname, '../dist/index.html'));
-  }
-};
+let win; // declare globally
 
 app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    icon: path.join(__dirname, 'build/icon.ico'),
+    webPreferences: {
+      devTools: true, // enable while debugging
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
+    }
   });
+
+  win.setTitle('24System');
+
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    const newWin = new BrowserWindow({
+      width: 800,
+      height: 600,
+      icon: path.join(__dirname, 'build/icon.ico'),
+      webPreferences: {
+        devTools: false,
+        nodeIntegration: false,
+        contextIsolation: true,
+      }
+    });
+
+    newWin.loadURL(url);
+    return { action: 'deny' };
+  });
+
+  const indexPath = pathToFileURL(path.join(__dirname, 'src/index.html')).toString();
+  win.loadURL(indexPath);
 });
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+ipcMain.on('close-app', () => {
+  app.quit();
 });

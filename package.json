@@ -30,10 +30,8 @@
   "main": "backend/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"npm run dev:vite\" \"npm run dev:electron\"",
-    "dev:vite": "vite",
-    "dev:electron": "wait-on http://localhost:5173 && electron .",
-    "build": "vite build"
+    "start": "npx electron .",
+    "build": ""
   },
   "build": {
     "appId": "com.24flight.24system",
@@ -43,15 +41,7 @@
     }
   },
   "devDependencies": {
-    "concurrently": "^9.2.1",
     "electron": "^38.2.0",
-    "electron-builder": "^26.0.12",
-    "wait-on": "^9.0.1",
-    "@vitejs/plugin-react": "^4.3.1"
-  },
-  "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "vite": "^7.1.7"
+    "electron-builder": "^26.0.12"
   }
 }
