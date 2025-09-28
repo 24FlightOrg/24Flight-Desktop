@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-let win; // declare globally
+let win;
 
 app.whenReady().then(() => {
   win = new BrowserWindow({
@@ -14,7 +14,7 @@ app.whenReady().then(() => {
     height: 600,
     icon: path.join(__dirname, 'build/icon.ico'),
     webPreferences: {
-      devTools: true, // enable while debugging
+      devTools: false,
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
