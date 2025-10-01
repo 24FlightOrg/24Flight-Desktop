@@ -75,61 +75,11 @@
         .discord-btn:hover {
             background-color: #4752c4;
         }
-
-        .titlebar {
-            -webkit-app-region: drag;
-            height: 32px;
-            background: #111;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 10px;
-        }
-
-        .titlebar .logo {
-            height: 20px;
-            margin-right: 6px;
-        }
-
-        .titlebar .title {
-            font-size: 14px;
-        }
-
-        .window-controls {
-            display: flex;
-            gap: 6px;
-        }
-
-        .window-controls button {
-            -webkit-app-region: no-drag;
-            /* buttons must not drag */
-            background: none;
-            border: none;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            padding: 4px 8px;
-        }
-
-        .window-controls button:hover {
-            background: #333;
-        }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.1.0/dist/cookieconsent.css" />
 </head>
 
 <body>
-    <div class="titlebar">
-        <img src="logo.png" class="logo" />
-        <span class="title">24Flight</span>
-
-        <div class="window-controls">
-            <button id="min-btn">−</button>
-            <button id="max-btn">⬜</button>
-            <button id="close-btn">×</button>
-        </div>
-    </div>
     <div class="container">
         <h1>Welcome to 24System! Please log in.</h1>
         <a onclick="window.auth.login()" class="discord-btn">
