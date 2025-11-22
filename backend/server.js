@@ -194,6 +194,28 @@ ipcMain.handle('get-token', async () => {
   return user_session_token || null;
 });
 
+ipcMain.handle('get-username', async () => {
+  if (!user_session_token) return null;
+  try {
+    const response = await fetch('https://24flight.org/oauth/@me', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user_session_token}`
+      }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data.username || null;
+    } else {
+      return null;
+    }
+  } catch (err) {
+    console.error('Error fetching username:', err);
+    return null;
+  }
+});
+
 ipcMain.handle('logout', async () => {
   user_session_token = null;
   deleteStoredToken();
