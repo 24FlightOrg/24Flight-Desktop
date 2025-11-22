@@ -31,7 +31,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx electron .",
-    "build": ""
+    "build": "npx electron-builder --win --mac",
+    "build:all": "npx electron-builder --win --mac --linux",
+    "build:linux": "npx electron-builder --linux",
+    "build:mac": "npx electron-builder --mac",
+    "build:win": "npx electron-builder --win"
   },
   "build": {
     "appId": "com.24flight.24system",
