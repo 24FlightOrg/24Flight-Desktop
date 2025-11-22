@@ -1,14 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>24Flight</title>
+        <link rel="stylesheet" href="css/index.css" />
+    </head>
+    <body>
+        <div class="page-wrap">
+            <main class="card">
+                <h1 id="welcome-username">Welcome</h1>
+                <p class="subtitle">Access 24Flight here:</p>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+                <div class="tiles">
+                    <a class="tile" id="btn-map" href="areas/map.html">Map</a>
+                    <a class="tile" id="btn-autopilot" href="areas/autopilot.html">Autopilot</a>
+                    <a class="tile" id="btn-tcas" href="areas/tcas.html">TCAS</a>
+                </div>
+            </main>
+        </div>
 
-<body>
-    <h1 id="welcome-username"></h1>
-    <script src="js/index.js"></script>
-</body>
-
+        <script src="js/index.js"></script>
+    </body>
 </html>
