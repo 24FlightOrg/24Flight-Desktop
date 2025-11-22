@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24System</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            background-image: url('login/image-bg.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 40px;
+            margin-left: 12vw;
+            backdrop-filter: blur(2px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 2rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2), inset 0 4px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            backdrop-filter: blur(1px);
+            box-shadow: inset -10px -8px 0px -11px rgba(255, 255, 255, 1), inset 0px -9px 0px -8px rgba(255, 255, 255, 1);
+            opacity: 0.6;
+            z-index: -1;
+            filter: blur(1px) drop-shadow(10px 4px 6px black) brightness(115%);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: black;
+        }
+
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #5865f2;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.2s ease-in-out;
+        }
+
+        .discord-btn img {
+            height: 20px;
+            width: 20px;
+        }
+
+        .discord-btn:hover {
+            background-color: #4752c4;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.1.0/dist/cookieconsent.css" />
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to 24Flight! Please log in.</h1>
+        <button onclick="window.electronAuth.openLogin();" class="discord-btn">
+            <img src="login/discord.png" alt="Discord" />
+            <span>Login with Discord</span>
+        </button>
+    </div>
+
+    <script>
+        window.electronAuth.onAuth((token) => {
+            console.log("Logged in with token:", token);
+            localStorage.setItem("auth_token", token);
+            window.location = "home.html";
+        });
+    </script>
+
+</body>
+
+</html>
