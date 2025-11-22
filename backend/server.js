@@ -1,12 +1,15 @@
 import { app, BrowserWindow, ipcMain, safeStorage } from 'electron';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let win;
 let user_session_token;
+
+const TOKEN_FILE = path.join(app.getPath('userData'), 'auth-token.json');
 
 async function validateToken(token) {
   try {
@@ -27,9 +30,8 @@ async function validateToken(token) {
 function saveToken(token) {
   try {
     const encrypted = safeStorage.encryptString(token);
-    app.userDefaults = app.userDefaults || {};
-    app.userDefaults.auth_token = encrypted.toString('latin1');
-    console.log('Token saved to safeStorage');
+    fs.writeFileSync(TOKEN_FILE, JSON.stringify({ token: encrypted.toString('latin1') }));
+    console.log('Token saved to secure storage');
   } catch (err) {
     console.error('Error saving token:', err);
   }
@@ -37,11 +39,15 @@ function saveToken(token) {
 
 function getStoredToken() {
   try {
-    if (!app.userDefaults || !app.userDefaults.auth_token) {
+    if (!fs.existsSync(TOKEN_FILE)) {
+      console.log('Token file does not exist');
       return null;
     }
-    const encrypted = Buffer.from(app.userDefaults.auth_token, 'latin1');
-    return safeStorage.decryptString(encrypted);
+    const data = JSON.parse(fs.readFileSync(TOKEN_FILE, 'utf-8'));
+    const encrypted = Buffer.from(data.token, 'latin1');
+    const decrypted = safeStorage.decryptString(encrypted);
+    console.log('Token retrieved from secure storage');
+    return decrypted;
   } catch (err) {
     console.error('Error retrieving token:', err);
     return null;
@@ -50,27 +56,35 @@ function getStoredToken() {
 
 function deleteStoredToken() {
   try {
-    if (app.userDefaults) {
-      delete app.userDefaults.auth_token;
+    if (fs.existsSync(TOKEN_FILE)) {
+      fs.unlinkSync(TOKEN_FILE);
     }
-    console.log('Token deleted from safeStorage');
+    user_session_token = null;
+    console.log('Token deleted from secure storage');
   } catch (err) {
     console.error('Error deleting token:', err);
   }
 }
 
 app.whenReady().then(async () => {
-  // Check for valid stored token on app startup
+  let isLoggedIn = false;
   const storedToken = getStoredToken();
+  
   if (storedToken) {
+    console.log('Found stored token, validating...');
     const isValid = await validateToken(storedToken);
     if (isValid) {
       user_session_token = storedToken;
-      console.log('Valid stored token found and loaded');
+      isLoggedIn = true;
+      console.log('✓ Valid stored token found and loaded');
     } else {
-      console.log('Stored token is invalid, deleting it');
+      console.log('✗ Stored token is invalid, deleting it');
       deleteStoredToken();
+      isLoggedIn = false;
     }
+  } else {
+    console.log('No stored token found');
+    isLoggedIn = false;
   }
   
   win = new BrowserWindow({
@@ -86,13 +100,17 @@ app.whenReady().then(async () => {
   });
 
   win.setTitle('24Flight');
-  if (user_session_token !== null) {
-    const indexPath = pathToFileURL(path.join(__dirname, 'src/index.html')).toString();
-    win.loadURL(indexPath);
+
+  let filePath;
+  if (isLoggedIn) {
+    filePath = pathToFileURL(path.join(__dirname, 'src/index.html')).toString();
+    console.log('Loading main app (user is logged in)');
   } else {
-    const indexPath = pathToFileURL(path.join(__dirname, 'src/login.html')).toString();
-    win.loadURL(indexPath);
+    filePath = pathToFileURL(path.join(__dirname, 'src/login.html')).toString();
+    console.log('Loading login page (user is not logged in)');
   }
+  
+  win.loadURL(filePath);
 });
 
 ipcMain.handle('open-login', async () => {
@@ -128,6 +146,10 @@ ipcMain.handle('open-login', async () => {
             finished = true;
             user_session_token = token;
             saveToken(token);
+            
+            const indexPath = pathToFileURL(path.join(__dirname, 'src/index.html')).toString();
+            win.loadURL(indexPath);
+            
             win.webContents.send('auth-token', token);
             resolve(token);
             if (!oauthWindow.isDestroyed()) oauthWindow.close();
