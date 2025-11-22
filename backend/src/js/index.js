@@ -1,1 +1,3 @@
-document.getElementById('welcome-username').innerText = `Welcome ${window.userData.username || 'Unknown'}`;
+window.userData.username().then(username => {
+  document.getElementById('welcome-username').innerText = `Welcome ${username || 'Unknown'}`;
+});
