@@ -81,12 +81,21 @@
 
 <body>
     <div class="container">
-        <h1>Welcome to 24System! Please log in.</h1>
-        <a onclick="window.auth.login()" class="discord-btn">
+        <h1>Welcome to 24Flight! Please log in.</h1>
+        <button onclick="window.electronAuth.openLogin();" class="discord-btn">
             <img src="login/discord.png" alt="Discord" />
             <span>Login with Discord</span>
-        </a>
+        </button>
     </div>
+
+    <script>
+        window.electronAuth.onAuth((token) => {
+            console.log("Logged in with token:", token);
+            localStorage.setItem("auth_token", token);
+            window.location = "home.html";
+        });
+    </script>
+
 </body>
 
 </html>

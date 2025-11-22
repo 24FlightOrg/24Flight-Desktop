@@ -1,19 +1,7 @@
-import { contextBridge, ipcRenderer } from 'electron';
+// preload.js (CommonJS)
+const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld("auth", {
-  login: () => ipcRenderer.invoke("login-discord"),
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("min-btn").addEventListener("click", () => {
-    ipcRenderer.send("window-control", "minimize");
-  });
-
-  document.getElementById("max-btn").addEventListener("click", () => {
-    ipcRenderer.send("window-control", "maximize");
-  });
-
-  document.getElementById("close-btn").addEventListener("click", () => {
-    ipcRenderer.send("window-control", "close");
-  });
+contextBridge.exposeInMainWorld('electronAuth', {
+  openLogin: () => ipcRenderer.invoke('open-login'),
+  onAuth: (cb) => ipcRenderer.on('auth-token', (_, token) => cb(token)),
 });
