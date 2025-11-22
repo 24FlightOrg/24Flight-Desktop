@@ -10,8 +10,8 @@ let user_session_token;
 
 async function validateToken(token) {
   try {
-    const response = await fetch('https://24flight.org/api/validate-token', {
-      method: 'POST',
+    const response = await fetch('https://24flight.org/oauth/@me', {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
