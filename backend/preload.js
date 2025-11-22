@@ -9,3 +9,7 @@ contextBridge.exposeInMainWorld('electronAuth', {
 contextBridge.exposeInMainWorld('userData', {
   username: () => ipcRenderer.invoke('get-username'),
 });
+
+contextBridge.exposeInMainWorld('userControl', {
+  logout: () => ipcRenderer.invoke('logout'),
+});

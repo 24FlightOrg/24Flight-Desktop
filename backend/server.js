@@ -22,7 +22,7 @@ async function validateToken(token) {
     });
     return response.ok;
   } catch (err) {
-    console.error('Error validating token:', err);
+    console.error('error validating token:', err);
     return false;
   }
 }
@@ -31,25 +31,25 @@ function saveToken(token) {
   try {
     const encrypted = safeStorage.encryptString(token);
     fs.writeFileSync(TOKEN_FILE, JSON.stringify({ token: encrypted.toString('latin1') }));
-    console.log('Token saved to secure storage');
+    console.log('token saved');
   } catch (err) {
-    console.error('Error saving token:', err);
+    console.error('error saving token:', err);
   }
 }
 
 function getStoredToken() {
   try {
     if (!fs.existsSync(TOKEN_FILE)) {
-      console.log('Token file does not exist');
+      console.log('tokenfile doesnt exist');
       return null;
     }
     const data = JSON.parse(fs.readFileSync(TOKEN_FILE, 'utf-8'));
     const encrypted = Buffer.from(data.token, 'latin1');
     const decrypted = safeStorage.decryptString(encrypted);
-    console.log('Token retrieved from secure storage');
+    console.log('token fetched');
     return decrypted;
   } catch (err) {
-    console.error('Error retrieving token:', err);
+    console.error('error retrieving token:', err);
     return null;
   }
 }
@@ -60,9 +60,9 @@ function deleteStoredToken() {
       fs.unlinkSync(TOKEN_FILE);
     }
     user_session_token = null;
-    console.log('Token deleted from secure storage');
+    console.log('token deleted');
   } catch (err) {
-    console.error('Error deleting token:', err);
+    console.error('error deleting token:', err);
   }
 }
 
@@ -71,19 +71,19 @@ app.whenReady().then(async () => {
   const storedToken = getStoredToken();
   
   if (storedToken) {
-    console.log('Found stored token, validating...');
+    console.log('found token, validating...');
     const isValid = await validateToken(storedToken);
     if (isValid) {
       user_session_token = storedToken;
       isLoggedIn = true;
-      console.log('✓ Valid stored token found and loaded');
+      console.log('token found and checked to be valid');
     } else {
-      console.log('✗ Stored token is invalid, deleting it');
+      console.log('token invalidated, deleting');
       deleteStoredToken();
       isLoggedIn = false;
     }
   } else {
-    console.log('No stored token found');
+    console.log('no stored token found');
     isLoggedIn = false;
   }
   
@@ -104,10 +104,8 @@ app.whenReady().then(async () => {
   let filePath;
   if (isLoggedIn) {
     filePath = pathToFileURL(path.join(__dirname, 'src/index.html')).toString();
-    console.log('Loading main app (user is logged in)');
   } else {
     filePath = pathToFileURL(path.join(__dirname, 'src/login.html')).toString();
-    console.log('Loading login page (user is not logged in)');
   }
   
   win.loadURL(filePath);
@@ -151,7 +149,6 @@ ipcMain.handle('open-login', async () => {
             const indexPath = pathToFileURL(path.join(__dirname, 'src/index.html')).toString();
             win.loadURL(indexPath);
             
-            win.webContents.send('auth-token', token);
             resolve(token);
             if (!oauthWindow.isDestroyed()) oauthWindow.close();
           }
