@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, safeStorage } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain, safeStorage } from 'electron';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import fs from 'fs';
@@ -111,6 +111,7 @@ app.whenReady().then(async () => {
   }
   
   win.loadURL(filePath);
+  Menu.setApplicationMenu(null);
 });
 
 ipcMain.handle('open-login', async () => {
