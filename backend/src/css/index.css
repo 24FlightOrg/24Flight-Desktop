@@ -13,19 +13,95 @@ body {
     overflow: hidden
 }
 
+.top-bar {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(135deg, var(--accent) 0%, #161616 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.top-bar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 24px;
+    box-sizing: border-box;
+    flex: 1;
+    -webkit-app-region: drag;
+}
+
+.top-bar-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.top-bar-username {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.window-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    -webkit-app-region: no-drag;
+}
+
+.window-control {
+    width: 36px;
+    height: 60px;
+    border: none;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.window-control:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.close-btn:hover {
+    background-color: #ff3333;
+}
+
+.window-control svg {
+    width: 10px;
+    height: 10px;
+}
+
 .page-wrap {
-    height: 100vh;
+    height: calc(100vh - 60px);
+    width: 100vw;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     padding: 0;
-    box-sizing: border-box
+    box-sizing: border-box;
+    margin: 0;
+    margin-top: 60px;
+    overflow-y: auto;
 }
 
 .card {
     width: 100%;
-    height: 100vh;
-    max-width: none;
+    max-width: 100%;
     background: var(--panel-bg);
     color: #fff;
     padding: 48px;
@@ -36,12 +112,13 @@ body {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+    height: 100vh;
     overflow: hidden;
     margin: 0
 }
 
 h1 {
-    font-size: clamp(24px, 4.5vw, 48px);
+    font-size: 48px;
     margin: 0 0 8px 0;
     font-weight: 600
 }
@@ -49,7 +126,7 @@ h1 {
 .subtitle {
     color: rgba(255, 255, 255, 0.85);
     margin: 0 0 24px 0;
-    font-size: clamp(14px, 1.6vw, 18px)
+    font-size: 18px
 }
 
 .tiles {
@@ -57,14 +134,14 @@ h1 {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 4vw;
+    gap: 20px;
     width: 100%;
     flex-shrink: 0
 }
 
 .tile {
-    width: clamp(110px, 18vw, 220px);
-    height: clamp(110px, 18vw, 220px);
+    width: 220px;
+    height: 220px;
     background: var(--accent);
     display: flex;
     align-items: center;
@@ -73,13 +150,48 @@ h1 {
     color: #fff;
     text-decoration: none;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-    font-size: clamp(14px, 1.6vw, 18px);
-    flex: 0 0 auto
+    font-size: 32px;
+    flex: 0 0 auto;
+    font-weight: 600;
 }
 
 .tile:hover {
     transform: translateY(-4px);
     transition: transform .15s ease
+}
+
+@media (max-width:1200px) {
+    h1 {
+        font-size: 36px;
+    }
+    .subtitle {
+        font-size: 16px;
+    }
+    .tiles {
+        gap: 15px;
+    }
+    .tile {
+        width: 180px;
+        height: 180px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width:900px) {
+    h1 {
+        font-size: 28px;
+    }
+    .subtitle {
+        font-size: 14px;
+    }
+    .tiles {
+        gap: 10px;
+    }
+    .tile {
+        width: 140px;
+        height: 140px;
+        font-size: 14px;
+    }
 }
 
 @media (max-width:600px) {

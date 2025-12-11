@@ -13,3 +13,9 @@ contextBridge.exposeInMainWorld('userData', {
 contextBridge.exposeInMainWorld('userControl', {
   logout: () => ipcRenderer.invoke('logout'),
 });
+
+contextBridge.exposeInMainWorld('windowControl', {
+  minimize: () => ipcRenderer.invoke('window-minimize'),
+  maximize: () => ipcRenderer.invoke('window-maximize'),
+  close: () => ipcRenderer.invoke('window-close'),
+});
