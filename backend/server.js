@@ -2,12 +2,22 @@ import { app, BrowserWindow, Menu, ipcMain, safeStorage } from 'electron';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import fs from 'fs';
+import express from "express";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let win;
 let user_session_token;
+
+const server = express();
+const SERVER_PORT = 24000;
+
+server.use(express.static(path.join(__dirname, "src")));
+
+server.listen(SERVER_PORT, () => {
+  console.log("Local Express server running on http://localhost:" + SERVER_PORT);
+});
 
 const TOKEN_FILE = path.join(app.getPath('userData'), 'auth-token.json');
 
@@ -90,10 +100,10 @@ app.whenReady().then(async () => {
   let windowHeight = 600;
   let filePath;
   if (isLoggedIn) {
-    filePath = pathToFileURL(path.join(__dirname, 'src/index.html')).toString();
-    windowHeight = 300; // Half height for index.html
+    filePath = `http://localhost:${SERVER_PORT}/index.html`
+    windowHeight = 300;
   } else {
-    filePath = pathToFileURL(path.join(__dirname, 'src/login.html')).toString();
+    filePath = `http://localhost:${SERVER_PORT}/login.html`
   }
   
   win = new BrowserWindow({
@@ -146,7 +156,7 @@ ipcMain.handle('open-login', async () => {
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
-        devTools: false
+        devTools: true
       }
     });
 
@@ -166,7 +176,7 @@ ipcMain.handle('open-login', async () => {
             user_session_token = token;
             saveToken(token);
             
-            const indexPath = pathToFileURL(path.join(__dirname, 'src/index.html')).toString();
+            const indexPath = `http://localhost:${SERVER_PORT}/index.html`
             win.loadURL(indexPath);
             
             resolve(token);
