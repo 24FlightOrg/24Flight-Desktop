@@ -76,9 +76,12 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.1.0/dist/cookieconsent.css" />
+    <link rel="stylesheet" href="/topbar/topbar.css" />
 </head>
 
 <body>
+    <div class="top-bar" id="top-bar"></div>
+
     <div class="container">
         <h1>Welcome to 24Flight! Please log in.</h1>
         <button onclick="window.electronAuth.openLogin();" class="discord-btn">
@@ -88,12 +91,11 @@
     </div>
 
     <script>
-        window.electronAuth.onAuth((token) => {
-            console.log("Logged in with token:", token);
-            localStorage.setItem("auth_token", token);
-            window.location = "home.html";
-        });
+        window.topBarSettings = {
+            title: "24Flight - Login",
+        };
     </script>
+    <script src="/topbar/topbar.js"></script>
 
 </body>
 
