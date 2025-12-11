@@ -1,4 +1,3 @@
-// preload.js (CommonJS)
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAuth', {
@@ -8,6 +7,7 @@ contextBridge.exposeInMainWorld('electronAuth', {
 
 contextBridge.exposeInMainWorld('userData', {
   username: () => ipcRenderer.invoke('get-username'),
+  getloginstatus: () => ipcRenderer.invoke('get-login')
 });
 
 contextBridge.exposeInMainWorld('userControl', {

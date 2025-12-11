@@ -90,7 +90,7 @@ app.whenReady().then(async () => {
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: path.join(__dirname, 'build/icon.ico'),
+    icon: path.join(__dirname, '../assets/24flight.png'),
     webPreferences: {
       devTools: false,
       nodeIntegration: false,
@@ -217,4 +217,8 @@ ipcMain.handle('logout', async () => {
   user_session_token = null;
   deleteStoredToken();
   return true;
+});
+
+ipcMain.handle('get-login', () => {
+  return isLoggedIn;
 });

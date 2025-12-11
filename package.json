@@ -1,7 +1,9 @@
 {
-  "name": "24system",
+  "name": "24flight",
   "version": "1.0.0",
-  "description": "Downloadable things for 24Flight. Includes autopilot and other things.",
+  "description": "The PC client for 24Flight.",
+  "main": "backend/server.js",
+  "type": "module",
   "homepage": "https://github.com/24FlightOrg/24FlightSystem#readme",
   "bugs": {
     "url": "https://github.com/24FlightOrg/24FlightSystem/issues"
@@ -22,12 +24,10 @@
       "url": "https://github.com/PilotJDK"
     },
     {
-      "name": "awdev1",
+      "name": "awdev",
       "url": "https://github.com/awdev1"
     }
   ],
-  "type": "module",
-  "main": "backend/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx electron .",
@@ -37,15 +37,57 @@
     "build:mac": "npx electron-builder --mac",
     "build:win": "npx electron-builder --win"
   },
-  "build": {
-    "appId": "com.24flight.24system",
-    "productName": "24System",
-    "directories": {
-      "output": "dist"
-    }
-  },
   "devDependencies": {
     "electron": "^38.2.0",
     "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "org.24flight.desktop",
+    "productName": "24Flight",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "mac": {
+      "icon": "build/icons",
+      "target": [
+        "dmg"
+      ],
+      "sign": false,
+      "hardenedRuntime": false
+    },
+    "win": {
+      "icon": "build/icons",
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "icon": "build/icons",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "dmg": {
+      "icon": "build/icons/icon.icns",
+      "iconSize": 128,
+      "contents": [
+        {
+          "x": 130,
+          "y": 220,
+          "type": "file"
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "files": [
+      "**/*"
+    ]
   }
 }
