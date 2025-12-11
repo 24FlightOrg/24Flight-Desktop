@@ -114,7 +114,6 @@ app.whenReady().then(async () => {
   Menu.setApplicationMenu(null);
 });
 
-// Window control handlers
 ipcMain.handle('window-minimize', () => {
   if (win) win.minimize();
 });
