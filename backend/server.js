@@ -87,10 +87,20 @@ app.whenReady().then(async () => {
     isLoggedIn = false;
   }
   
+  let windowHeight = 600;
+  let filePath;
+  if (isLoggedIn) {
+    filePath = pathToFileURL(path.join(__dirname, 'src/index.html')).toString();
+    windowHeight = 300; // Half height for index.html
+  } else {
+    filePath = pathToFileURL(path.join(__dirname, 'src/login.html')).toString();
+  }
+  
   win = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: windowHeight,
     icon: path.join(__dirname, 'build/icon.ico'),
+    frame: false,
     webPreferences: {
       devTools: false,
       nodeIntegration: false,
@@ -100,16 +110,27 @@ app.whenReady().then(async () => {
   });
 
   win.setTitle('24Flight');
-
-  let filePath;
-  if (isLoggedIn) {
-    filePath = pathToFileURL(path.join(__dirname, 'src/index.html')).toString();
-  } else {
-    filePath = pathToFileURL(path.join(__dirname, 'src/login.html')).toString();
-  }
-  
   win.loadURL(filePath);
   Menu.setApplicationMenu(null);
+});
+
+// Window control handlers
+ipcMain.handle('window-minimize', () => {
+  if (win) win.minimize();
+});
+
+ipcMain.handle('window-maximize', () => {
+  if (win) {
+    if (win.isMaximized()) {
+      win.unmaximize();
+    } else {
+      win.maximize();
+    }
+  }
+});
+
+ipcMain.handle('window-close', () => {
+  if (win) win.close();
 });
 
 ipcMain.handle('open-login', async () => {
