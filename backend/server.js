@@ -90,7 +90,7 @@ app.whenReady().then(async () => {
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: path.join(__dirname, '../assets/24flight.png'),
+    icon: path.join(process.cwd(), 'assets/24flight.png'),
     webPreferences: {
       devTools: false,
       nodeIntegration: false,
