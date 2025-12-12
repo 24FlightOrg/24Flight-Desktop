@@ -14,7 +14,18 @@
 <body>
     <div class="top-bar" id="top-bar"></div>
 
-    <div id="map"></div>
+    <div id="mapContainer">
+      <div id="map">
+      </div>
+      <div class="corner-info">
+        <div class="clock-row">
+          <img src="https://24flight.org/unified/icons/corner-info/clock.png" alt="Clock"> <span id="utc-time">--:--:-- UTC</span>
+        </div>
+        <div class="wind-row">
+          <img src="https://24flight.org/unified/icons/corner-info/wind.png" alt="Wind"> <span id="wind-info">---° @ --kts</span>
+        </div>
+      </div>
+    </div>
 
     <script>
         window.topBarSettings = {
