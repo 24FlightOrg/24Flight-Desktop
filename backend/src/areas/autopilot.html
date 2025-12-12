@@ -5,12 +5,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>24Flight - Autopilot</title>
-    <link rel="stylesheet" href="/topbar/topbar.css" />
+    <link rel="stylesheet" href="../topbar/topbar.css" />
     <link rel="stylesheet" href="css/area.css" />
+    <style>
+        .back-button {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s ease;
+            font-weight: 700;
+        }
+        .back-button:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 
 <body>
-    <div class="top-bar" id="top-bar"></div>
+    <!-- Top bar with back button -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                <button class="back-button" id="back-btn" title="Go back">←</button>
+                <h1 class="top-bar-title">24Flight - Autopilot</h1>
+            </div>
+        </div>
 
     <div class="content">
         <h1>Autopilot</h1>
@@ -18,11 +42,11 @@
     </div>
 
     <script>
-        window.topBarSettings = {
-            title: "24Flight - Autopilot",
-        };
+        document.getElementById('back-btn').addEventListener('click', () => {
+            window.location.href = '../index.html';
+        });
     </script>
-    <script src="/topbar/topbar.js"></script>
+    <script src="../topbar/topbar.js"></script>
 </body>
 
 </html>
