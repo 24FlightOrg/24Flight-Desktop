@@ -112,7 +112,7 @@ app.whenReady().then(async () => {
     icon: path.join(__dirname, 'build/icon.ico'),
     frame: false,
     webPreferences: {
-      devTools: false,
+      devTools: true,
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
@@ -156,7 +156,7 @@ ipcMain.handle('open-login', async () => {
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
-        devTools: true
+        devTools: false
       }
     });
 
@@ -251,4 +251,22 @@ ipcMain.handle('logout', async () => {
 
 ipcMain.handle('get-login', () => {
   return isLoggedIn;
+});
+
+ipcMain.on('autopilot-route', (event, route) => {
+  try {
+    console.log('Autopilot route received from renderer:', route);
+    if (route && route.action === 'engage') {
+      console.log('autopilot engaged');
+      if (route.route) console.log('Route details:', route.route);
+    } else if (route && route.action === 'disengage') {
+      console.log('autopilot disengaged');
+    } else {
+      console.log('autopilot action unknown:', route && route.action);
+    }
+
+    event.sender.send('autopilot-ack', { status: 'received', action: route && route.action, timestamp: Date.now() });
+  } catch (err) {
+    console.error('Error handling autopilot-route:', err);
+  }
 });

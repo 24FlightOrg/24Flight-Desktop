@@ -153,10 +153,8 @@ const aircraftMarkers = new Map();
 const aircraftLabelMarkers = new Map();
 const aircraftTrailLayers = new Map();
 const aircraftTrailVisible = new Map();
-// vertical offset (degrees/units) to place label below aircraft when not manually moved
 const LABEL_Y_OFFSET = 0.08;
 
-// Build safe airline/aircraft lookup maps from shared `data.js` if available
 const ICAO_MAP = (typeof AIRLINE_MAP !== 'undefined')
   ? Object.fromEntries(Object.values(AIRLINE_MAP).map(v => [v.icao && v.icao.toUpperCase(), v]))
   : {};
@@ -166,11 +164,8 @@ const INGAME_TO_ICAO = (typeof AIRLINE_MAP !== 'undefined')
       Object.entries(AIRLINE_MAP).flatMap(([name, v]) => {
         const icao = v.icao && v.icao.toUpperCase();
         const entries = [];
-        // Add the airline name itself (e.g., "American Airlines")
         entries.push([name.toLowerCase(), icao]);
-        // Add ingame name (e.g., "Americano")
         if (v.ingame) entries.push([v.ingame.toLowerCase(), icao]);
-        // Add radio name (e.g., "American")
         if (v.radio && v.radio !== v.ingame) entries.push([v.radio.toLowerCase(), icao]);
         return entries;
       })
@@ -182,36 +177,29 @@ const AIRCRAFT_NAMES = (typeof aircraftNames !== 'undefined') ? aircraftNames : 
 
 function computeIcaoPrefixedCallsign(callsign) {
   if (!callsign) return callsign;
-  
-  // Check if callsign already starts with a known ICAO code (like "BAW456")
+
   const icaoMatch = callsign.match(/^([A-Za-z]{2,3})(\d.*)$/);
   if (icaoMatch) {
     const code = icaoMatch[1].toUpperCase();
     if (ICAO_MAP[code]) {
-      // Already in ICAO format, return as-is
       return callsign;
     }
   }
   
-  // Try to match airline name at the beginning (before numbers or delimiters)
   const lowerCallsign = callsign.toLowerCase();
   
-  // Check for airline name followed by numbers (e.g., "American9908" -> "AAL 9908")
   for (const [airlineName, icao] of Object.entries(INGAME_TO_ICAO)) {
     if (lowerCallsign.startsWith(airlineName)) {
       const rest = callsign.substring(airlineName.length);
       if (rest && /^\d/.test(rest)) {
-        // Airline name followed by numbers
         return `${icao} ${rest}`;
       }
     }
   }
   
-  // Check for in-game airline prefix (before dash or space)
   const parts = callsign.split(/[-\s]/);
   const prefix = (parts[0] || '').toLowerCase();
   if (prefix && INGAME_TO_ICAO[prefix]) {
-    // Replace in-game name with ICAO (e.g., "Americano-123" -> "AAL 123")
     parts[0] = INGAME_TO_ICAO[prefix];
     return parts.join(' ');
   }
@@ -233,7 +221,6 @@ function computeLabelHtml(zoom, callsign, ac) {
   return `<div style="font-family: 'Roboto Mono', 'Consolas', monospace; font-size:13px; background:transparent; color:#fff; padding:4px 10px; border-radius:6px; white-space:nowrap; text-align:left; z-index:19349235;"><div>${displayCallsign}</div><div><span style='color:white;'>${type}</span> <span style='color:white;'>${alt}</span></div><div><span style='color:white;'>${speed}</span></div></div>`;
 }
 
-// Single zoom handler updates all labels using latest aircraft data
 map.on('zoomend', () => {
   const zoom = map.getZoom();
   for (const [callsign, entry] of aircraftLabelMarkers.entries()) {
@@ -446,19 +433,15 @@ async function plotAircraft(data) {
       aircraftMarkers.set(callsign, marker);
     }
 
-    // If there's already a label/line for this callsign and it wasn't manually moved,
-    // keep the label positioned below the aircraft and update the dashed line.
     if (aircraftLabelMarkers.has(callsign)) {
       const entry = aircraftLabelMarkers.get(callsign);
       const labelMarker = entry.label;
       const line = entry.line;
       const manualMoved = entry.manualMoved;
       if (!manualMoved && labelMarker) {
-        // keep label offset below the aircraft (centered horizontally)
         labelMarker.setLatLng([lat + LABEL_Y_OFFSET, lng]);
       }
       if (line) {
-        // update dashed line endpoints to current positions
         const markerLatLng = marker.getLatLng();
         const labelLatLng = labelMarker ? labelMarker.getLatLng() : markerLatLng;
         line.setLatLngs([markerLatLng, labelLatLng]);
@@ -504,7 +487,6 @@ async function plotAircraft(data) {
     }).addTo(map);
 
     marker.on('move', () => {
-      // when the aircraft moves, if the label was not manually moved, keep it below the aircraft
       try {
         const entry = aircraftLabelMarkers.get(callsign);
         const manual = entry ? entry.manualMoved : false;
@@ -535,8 +517,6 @@ function updateUTCClock() {
 
 setInterval(updateUTCClock, 1000);
 
-// Render waypoints/airports from loaded data.js
-// If data.js loaded successfully, Fixes will be defined on window
 if (typeof Fixes !== 'undefined' && Fixes && Fixes.length > 0) {
     renderFixes(Fixes);
 } else {

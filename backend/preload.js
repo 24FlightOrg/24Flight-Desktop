@@ -19,3 +19,8 @@ contextBridge.exposeInMainWorld('windowControl', {
   maximize: () => ipcRenderer.invoke('window-maximize'),
   close: () => ipcRenderer.invoke('window-close'),
 });
+
+contextBridge.exposeInMainWorld('autopilot', {
+  sendRoute: (route) => ipcRenderer.send('autopilot-route', route),
+  onAck: (cb) => ipcRenderer.on('autopilot-ack', (_, data) => cb(data)),
+});
