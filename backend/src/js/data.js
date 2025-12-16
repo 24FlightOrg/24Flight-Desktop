@@ -257,11 +257,11 @@ const aircraftCodes = {
 const AIRLINE_MAP = {
     'Aer Lingus': { icao: 'EIN', radio: 'Shamrock', ingame: 'Shamrock' },
     'Aeroflot': { icao: 'AFL', radio: 'Aeroflot', ingame: 'AEROFLOT' },
-    'Air Canada': { icao: 'ACA', radio: 'Air Canada', ingame: 'AirCanadian' },
+    'Air Canada': { icao: 'ACA', radio: 'Air Canada', ingame: 'Air Canadian' },
     'Air Baltic': { icao: 'BTI', radio: 'Air Baltic', ingame: 'AirBalistic' },
     'Air New Zealand': { icao: 'ANZ', radio: 'New Zealand', ingame: 'OldZealand' },
     'American Airlines': { icao: 'AAL', radio: 'American', ingame: 'Americano' },
-    'Antonov Airlines': { icao: 'ADB', radio: 'Antonov Bureau', ingame: 'AntonovBureau' },
+    'Antonov Airlines': { icao: 'ADB', radio: 'Antonov Bureau', ingame: 'Antonov Bureau' },
     'Azul': { icao: 'AZU', radio: 'Azul', ingame: 'Azol' },
     'Delta': { icao: 'DAL', radio: 'Delta', ingame: 'Belta' },
     'Air France': { icao: 'AFR', radio: 'Air France', ingame: 'Bepsi' },
@@ -589,7 +589,7 @@ const Fixes = [
     { name: "ALDER", px: 3212.92, py: 11899.28, size: 32, type: "waypoint" }, //Alder
     { name: "STACK", px: 1506.25, py: 12237.5, size: 32, type: "waypoint" }, //Stack
     { name: "WASTE", px: 23.44, py: 12975, size: 32, type: "waypoint" }, //Waste
-    { name: "HOGGS", px: 3000.78, py: 12844.48, size: 32, type: "waypoint" }, //Hoggs
+    { name: "HOGGS", px: 3000.78, py: 12844.48, size: 32, type: "waypoint" }, //Hogs
     { name: "ROBUX", px: 2358.86, py: 14075.84, size: 32, type: "waypoint" }, //Robux
 
     // Rockford
