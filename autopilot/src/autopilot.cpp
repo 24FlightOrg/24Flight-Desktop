@@ -1,6 +1,3 @@
-// Simple autopilot prediction fetcher
-// Builds with: cmake .. && cmake --build .  (requires libcurl)
-
 #include <iostream>
 #include <fstream>
 #include <string>
