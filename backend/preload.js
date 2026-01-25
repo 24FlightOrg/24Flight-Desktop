@@ -18,9 +18,17 @@ contextBridge.exposeInMainWorld('windowControl', {
   minimize: () => ipcRenderer.invoke('window-minimize'),
   maximize: () => ipcRenderer.invoke('window-maximize'),
   close: () => ipcRenderer.invoke('window-close'),
+  openAircraft: (callsign) => ipcRenderer.invoke('open-aircraft-window', callsign),
 });
 
 contextBridge.exposeInMainWorld('autopilot', {
   sendRoute: (route) => ipcRenderer.send('autopilot-route', route),
   onAck: (cb) => ipcRenderer.on('autopilot-ack', (_, data) => cb(data)),
+});
+
+contextBridge.exposeInMainWorld('mapBridge', {
+  sendAircraftData: (data) => ipcRenderer.send('aircraft-data', data),
+  sendFlightPlans: (plans) => ipcRenderer.send('flightplans-data', plans),
+  onAircraftData: (cb) => ipcRenderer.on('aircraft-data', (_, data) => cb(data)),
+  onFlightPlans: (cb) => ipcRenderer.on('flightplans-data', (_, data) => cb(data)),
 });

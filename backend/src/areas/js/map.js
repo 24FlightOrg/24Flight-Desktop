@@ -356,12 +356,29 @@ async function handleAircraftUpdate(aircraft) {
     const flightPlan = flightPlans.get(aircraftData?.playerName);
     await updateSidebarData(selectedAircraftCallsign, aircraftData, flightPlan);
   }
+
+  // forward the latest aircraft data to the main process so Electron can forward to aircraft windows
+  try {
+    if (window.mapBridge && typeof window.mapBridge.sendAircraftData === 'function') {
+      window.mapBridge.sendAircraftData(aircraft);
+    }
+  } catch (e) {
+    // ignore
+  }
 }
 
 function updateFlightPlans(plans) {
   flightPlans.clear();
   for (const [robloxName, plan] of Object.entries(plans)) {
     flightPlans.set(robloxName, plan);
+  }
+
+  try {
+    if (window.mapBridge && typeof window.mapBridge.sendFlightPlans === 'function') {
+      window.mapBridge.sendFlightPlans(plans);
+    }
+  } catch (e) {
+    // ignore
   }
 }
 
@@ -387,6 +404,23 @@ async function updateVisibleAircraftTrails() {
 }
 
 setInterval(updateVisibleAircraftTrails, 1500);
+
+function openAircraftWindow(callsign) {
+  try {
+    if (window.windowControl && typeof window.windowControl.openAircraft === 'function') {
+      window.windowControl.openAircraft(callsign);
+    } else {
+      // fallback to opening a normal window if preload isn't present
+      const name = `aircraft_${callsign}`;
+      const url = `aircraft.html?callsign=${encodeURIComponent(callsign)}`;
+      const features = 'width=420,height=520,resizable=yes,scrollbars=yes';
+      const win = window.open(url, name, features);
+      if (win) win.focus();
+    }
+  } catch (e) {
+    console.error('Failed to open aircraft window', e);
+  }
+}
 
 async function plotAircraft(data) {
   const callsigns = Object.keys(data);
@@ -431,6 +465,13 @@ async function plotAircraft(data) {
       });
       marker = L.marker([lat, lng], { icon }).addTo(map);
       aircraftMarkers.set(callsign, marker);
+    }
+
+    try {
+      marker.off('click');
+      marker.on('click', () => openAircraftWindow(callsign));
+    } catch (e) {
+      // ignore if marker doesn't support events yet
     }
 
     if (aircraftLabelMarkers.has(callsign)) {
