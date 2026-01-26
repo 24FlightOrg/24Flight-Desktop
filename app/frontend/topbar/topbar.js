@@ -52,13 +52,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const navBack = document.getElementById('nav-back');
   const navHome = document.getElementById('nav-home');
 
-  // Define paths that are considered "secondary windows" where nav should be hidden
   const secondaryPaths = ['/areas/aircraft.html'];
   const isSecondaryWindow = secondaryPaths.some(path => window.location.pathname.includes(path));
 
   if (!isSecondaryWindow) {
     if (navHome) {
-      // Show home button if not on index.html
       const currentPath = window.location.pathname;
       if (currentPath !== '/' && currentPath !== '/index.html') {
         navHome.style.display = 'flex';
@@ -69,9 +67,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (navBack) {
-      // Show back button if history allows (simple check)
-      // Note: Since this is a specialized app, we might always show it on subpages
-      // or rely on history length.
       if (window.history.length > 1) {
         navBack.style.display = 'flex';
         navBack.addEventListener('click', () => {
