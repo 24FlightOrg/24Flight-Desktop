@@ -10,7 +10,8 @@
     --warning: #f59e0b;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
     font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
@@ -19,9 +20,8 @@ html, body {
     overflow: hidden;
 }
 
-/* Page Layout */
 .page-wrap {
-    height: calc(100vh - 30px); /* Subtract top bar height approx */
+    height: calc(100vh - 30px);
     padding: 40px;
     box-sizing: border-box;
     display: flex;
@@ -100,7 +100,7 @@ html, body {
     transform: translateY(-5px);
     background: var(--panel-bg);
     border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .tile-icon {
@@ -126,7 +126,7 @@ html, body {
     background: var(--card-bg);
     border-radius: 12px;
     padding: 25px;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .info-card h2 {
@@ -143,7 +143,7 @@ html, body {
     align-items: center;
     margin-bottom: 12px;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .status-item:last-child {
@@ -161,14 +161,16 @@ html, body {
     font-weight: 600;
 }
 
-.status-value.online, .status-value.active {
+.status-value.online,
+.status-value.active {
     color: var(--success);
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.status-value.online::before, .status-value.active::before {
+.status-value.online::before,
+.status-value.active::before {
     content: '';
     display: block;
     width: 8px;
@@ -179,6 +181,13 @@ html, body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
