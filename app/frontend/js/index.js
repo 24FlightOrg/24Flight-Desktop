@@ -2,7 +2,6 @@ async function init() {
   try {
     const greetingEl = document.getElementById('username-display');
 
-    // Check if the API is exposed
     if (window.userData && typeof window.userData.globalname === 'function') {
       const globalname = await window.userData.globalname();
       if (globalname) {
@@ -14,14 +13,12 @@ async function init() {
       greetingEl.textContent = 'Unknown';
     }
 
-    // App Version
     if (window.userData && window.userData.appVersion) {
       const ver = await window.userData.appVersion();
       const verEl = document.querySelector('.status-value[data-type="version"]');
       if (verEl) verEl.textContent = 'v' + ver;
     }
 
-    // WebSocket Logic
     const connectionStatusEl = document.querySelector('.status-value[data-type="connection"]');
     const dataStreamEl = document.querySelector('.status-value[data-type="datastream"]');
     const activeFlightsEl = document.querySelector('.status-value[data-type="flights"]');
@@ -34,7 +31,6 @@ async function init() {
     };
 
     if (window['24data']) {
-      // Check initial status
       try {
         const initStatus = await window['24data'].getStatus();
         if (initStatus === 'online') {
