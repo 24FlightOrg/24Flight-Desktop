@@ -2,7 +2,7 @@
   "name": "24flight",
   "version": "1.0.0",
   "description": "The PC client for 24Flight.",
-  "main": "backend/server.js",
+  "main": "app/src/server.js",
   "type": "module",
   "homepage": "https://github.com/24FlightOrg/24FlightSystem#readme",
   "bugs": {
@@ -49,7 +49,7 @@
       "output": "dist"
     },
     "mac": {
-      "icon": "build/icons",
+      "icon": "build/icons/mac/icon.icns",
       "target": [
         "dmg"
       ],
@@ -57,20 +57,20 @@
       "hardenedRuntime": false
     },
     "win": {
-      "icon": "build/icons",
+      "icon": "build/icons/win/icon.ico",
       "target": [
         "nsis"
       ]
     },
     "linux": {
-      "icon": "build/icons",
+      "icon": "build/icons/linux/1024x1024.png",
       "target": [
         "AppImage",
         "deb"
       ]
     },
     "dmg": {
-      "icon": "build/icons/icon.icns",
+      "icon": "build/icons/mac/icon.icns",
       "iconSize": 128,
       "contents": [
         {
@@ -91,6 +91,7 @@
     ]
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "ws": "^8.19.0"
   }
 }

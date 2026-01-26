@@ -19,7 +19,6 @@ int main(int argc, char** argv) {
     if (argc >= 3) outpath = argv[2];
     if (argc >= 4) discordUser = argv[3];
 
-    // prepare prediction URL
     std::string url = base + "/flightnet/predict?seconds=5&step=0.5";
 
     CURL* curl = curl_easy_init();
@@ -44,12 +43,12 @@ int main(int argc, char** argv) {
         std::cerr << "curl error: " << curl_easy_strerror(rc) << "\n";
         return 3;
     }
+
     if (http_code < 200 || http_code >= 300) {
         std::cerr << "HTTP error: " << http_code << "\n";
         return 4;
     }
 
-    // If no discord user specified, save full predictions
     if (discordUser.empty()) {
         std::ofstream ofs(outpath, std::ios::binary);
         if (!ofs) {
@@ -62,7 +61,6 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    // If discord user provided, attempt to find their aircraft callsign by fetching acft-data
     std::string acftUrl = base + "/flightnet/acft-data";
     std::string acftResp;
     CURL* curl2 = curl_easy_init();

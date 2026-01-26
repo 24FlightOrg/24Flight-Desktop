@@ -39,7 +39,7 @@ function updateUI() {
   safeText('callsign', display);
   safeText('player', ac.playerName || '-');
   safeText('type', ac.aircraftType || '-');
-  safeText('alt', ac.altitude ? `FL${Math.round(ac.altitude/100)}` : '-');
+  safeText('alt', ac.altitude ? `FL${Math.round(ac.altitude / 100)}` : '-');
   safeText('spd', ac.speed ? `${Math.round(ac.speed)}kts` : '-');
   safeText('hdg', ac.heading != null ? `${Math.round(ac.heading)}°` : '-');
   if (ac.position) {
@@ -49,7 +49,7 @@ function updateUI() {
   }
 
   const plan = (ac.playerName && flightPlansObj[ac.playerName]) ? flightPlansObj[ac.playerName] : null;
-  safeText('fp-callsign', plan && plan.callsign ? plan.callsign : '-');
+  safeText('fp-callsign', (plan && plan.callsign) ? plan.callsign : (ac.callsign || targetCallsign || '-'));
 
   const title = plan && plan.callsign ? plan.callsign : (ac.callsign || targetCallsign || 'Aircraft');
   if (window.topBarSettings && window.topBarSettings.title !== title) {

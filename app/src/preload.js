@@ -7,7 +7,9 @@ contextBridge.exposeInMainWorld('electronAuth', {
 
 contextBridge.exposeInMainWorld('userData', {
   username: () => ipcRenderer.invoke('get-username'),
-  getloginstatus: () => ipcRenderer.invoke('get-login')
+  globalname: () => ipcRenderer.invoke('get-globalname'),
+  getloginstatus: () => ipcRenderer.invoke('get-login'),
+  appVersion: () => ipcRenderer.invoke('get-app-version')
 });
 
 contextBridge.exposeInMainWorld('userControl', {
@@ -31,4 +33,10 @@ contextBridge.exposeInMainWorld('mapBridge', {
   sendFlightPlans: (plans) => ipcRenderer.send('flightplans-data', plans),
   onAircraftData: (cb) => ipcRenderer.on('aircraft-data', (_, data) => cb(data)),
   onFlightPlans: (cb) => ipcRenderer.on('flightplans-data', (_, data) => cb(data)),
+});
+
+contextBridge.exposeInMainWorld('24data', {
+  onUpdate: (cb) => ipcRenderer.on('main-ws-update', (_, data) => cb(data)),
+  onMessage: (cb) => ipcRenderer.on('main-ws-message', (_, data) => cb(data)),
+  send: (data) => ipcRenderer.send('ws-send', data)
 });

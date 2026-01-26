@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>24Flight</title>
+    <link rel="stylesheet" href="/topbar/topbar.css" />
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+
+<body>
+    <div class="top-bar" id="top-bar"></div>
+
+    <div class="page-wrap">
+        <main class="dashboard-container">
+            <!-- Left Panel: Greeting & Navigation -->
+            <section class="dashboard-left">
+                <div class="greeting-section">
+                    <h1>Welcome back, <span id="username-display">Pilot</span>.</h1>
+                    <p class="subtitle">Select a module to begin your operations.</p>
+                </div>
+
+                <div class="tiles-grid">
+                    <a class="tile" id="btn-map" href="areas/map.html">
+                        <span class="tile-icon">🗺️</span>
+                        <span class="tile-label">Live Map</span>
+                    </a>
+                    <a class="tile" id="btn-autopilot" href="areas/autopilot.html">
+                        <span class="tile-icon">✈️</span>
+                        <span class="tile-label">Autopilot</span>
+                    </a>
+                    <a class="tile" id="btn-tcas" href="areas/tcas.html">
+                        <span class="tile-icon">📡</span>
+                        <span class="tile-label">TCAS</span>
+                    </a>
+                    <a class="tile" id="btn-overlay" href="areas/tcas.html">
+                        <span class="tile-icon">🎮</span>
+                        <span class="tile-label">Overlay</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Right Panel: Status & Info -->
+            <section class="dashboard-right">
+                <div class="info-card">
+                    <h2>System Status</h2>
+                    <div class="status-item">
+                        <span class="status-label">Server Connection</span>
+                        <span class="status-value" data-type="connection">Connecting...</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Data Stream</span>
+                        <span class="status-value" data-type="datastream">Inactive</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Version</span>
+                        <span class="status-value" data-type="version">--</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h2>Quick Stats</h2>
+                    <div class="status-item">
+                        <span class="status-label">Active Flights</span>
+                        <span class="status-value" data-type="flights">--</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        window.topBarSettings = {
+            title: "24Flight",
+        };
+    </script>
+    <script src="/topbar/topbar.js"></script>
+
+    <script src="js/index.js"></script>
+</body>
+
+</html>

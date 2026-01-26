@@ -2,7 +2,7 @@
 const { spawn } = require('child_process');
 
 function startAutopilot() {
-    const proc = spawn('./autopilot', [], { cwd: '../../autopilot' });
+    const proc = spawn('./autopilot', [], { cwd: '../../../autopilot' });
     proc.stdout.on('data', (data) => {
         // Parse and forward telemetry
         try {

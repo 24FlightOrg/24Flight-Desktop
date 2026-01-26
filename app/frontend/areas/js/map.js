@@ -53,53 +53,53 @@ map.setView(crs.unproject(L.point(imageWidth / 2, imageHeight / 2)), 2);
 const airspaceImageBounds = [[0, 0], [imageHeight, imageWidth]];
 
 class NotificationManager {
-    constructor(containerId = 'notification-container') {
-        this.container = document.getElementById(containerId);
-        if (!this.container) {
-            console.error('Notification container not found.');
-        }
+  constructor(containerId = 'notification-container') {
+    this.container = document.getElementById(containerId);
+    if (!this.container) {
+      console.error('Notification container not found.');
     }
+  }
 
-    show(message, duration = 5000) {
-        if (!this.container) return;
+  show(message, duration = 5000) {
+    if (!this.container) return;
 
-        const notification = document.createElement('div');
-        notification.className = 'notification';
+    const notification = document.createElement('div');
+    notification.className = 'notification';
 
-        const messageElement = document.createElement('span');
-        messageElement.className = 'notification-message';
-        messageElement.textContent = message;
+    const messageElement = document.createElement('span');
+    messageElement.className = 'notification-message';
+    messageElement.textContent = message;
 
-        const closeButton = document.createElement('button');
-        closeButton.className = 'notification-close';
-        closeButton.innerHTML = '&times;';
-        
-        const removeNotification = () => {
-            notification.style.animation = 'fadeOut 0.3s ease-in forwards';
-            notification.addEventListener('animationend', () => {
-                notification.remove();
-            });
-        };
+    const closeButton = document.createElement('button');
+    closeButton.className = 'notification-close';
+    closeButton.innerHTML = '&times;';
 
-        closeButton.onclick = removeNotification;
+    const removeNotification = () => {
+      notification.style.animation = 'fadeOut 0.3s ease-in forwards';
+      notification.addEventListener('animationend', () => {
+        notification.remove();
+      });
+    };
 
-        notification.appendChild(messageElement);
-        notification.appendChild(closeButton);
+    closeButton.onclick = removeNotification;
 
-        this.container.appendChild(notification);
+    notification.appendChild(messageElement);
+    notification.appendChild(closeButton);
 
-        const timeoutId = setTimeout(() => {
-            if (document.body.contains(notification)) {
-                removeNotification();
-            }
-        }, duration);
+    this.container.appendChild(notification);
 
-        notification.addEventListener('mouseenter', () => clearTimeout(timeoutId));
-    }
+    const timeoutId = setTimeout(() => {
+      if (document.body.contains(notification)) {
+        removeNotification();
+      }
+    }, duration);
+
+    notification.addEventListener('mouseenter', () => clearTimeout(timeoutId));
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    this.notifier = new NotificationManager('notification-container');
+  this.notifier = new NotificationManager('notification-container');
 });
 
 let selectedAircraftCallsign = null;
@@ -111,13 +111,9 @@ const wsPending = new Map();
 
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-ws = new WebSocket(`wss://24flight.org/ws`);
-
-//this.ws = new WebSocket(`ws://localhost:8081`);
-
 const ptfsBounds = {
-  top_left:     { x: -49222.1, y: -45890.8 },
-  bottom_right: { x:  47132.9, y:  46139.2 }
+  top_left: { x: -49222.1, y: -45890.8 },
+  bottom_right: { x: 47132.9, y: 46139.2 }
 };
 
 const flightPlans = new Map();
@@ -161,15 +157,15 @@ const ICAO_MAP = (typeof AIRLINE_MAP !== 'undefined')
 
 const INGAME_TO_ICAO = (typeof AIRLINE_MAP !== 'undefined')
   ? Object.fromEntries(
-      Object.entries(AIRLINE_MAP).flatMap(([name, v]) => {
-        const icao = v.icao && v.icao.toUpperCase();
-        const entries = [];
-        entries.push([name.toLowerCase(), icao]);
-        if (v.ingame) entries.push([v.ingame.toLowerCase(), icao]);
-        if (v.radio && v.radio !== v.ingame) entries.push([v.radio.toLowerCase(), icao]);
-        return entries;
-      })
-    )
+    Object.entries(AIRLINE_MAP).flatMap(([name, v]) => {
+      const icao = v.icao && v.icao.toUpperCase();
+      const entries = [];
+      entries.push([name.toLowerCase(), icao]);
+      if (v.ingame) entries.push([v.ingame.toLowerCase(), icao]);
+      if (v.radio && v.radio !== v.ingame) entries.push([v.radio.toLowerCase(), icao]);
+      return entries;
+    })
+  )
   : {};
 
 const AIRCRAFT_CODES = (typeof aircraftCodes !== 'undefined') ? aircraftCodes : {};
@@ -185,9 +181,9 @@ function computeIcaoPrefixedCallsign(callsign) {
       return callsign;
     }
   }
-  
+
   const lowerCallsign = callsign.toLowerCase();
-  
+
   for (const [airlineName, icao] of Object.entries(INGAME_TO_ICAO)) {
     if (lowerCallsign.startsWith(airlineName)) {
       const rest = callsign.substring(airlineName.length);
@@ -196,14 +192,14 @@ function computeIcaoPrefixedCallsign(callsign) {
       }
     }
   }
-  
+
   const parts = callsign.split(/[-\s]/);
   const prefix = (parts[0] || '').toLowerCase();
   if (prefix && INGAME_TO_ICAO[prefix]) {
     parts[0] = INGAME_TO_ICAO[prefix];
     return parts.join(' ');
   }
-  
+
   return callsign;
 }
 
@@ -216,7 +212,7 @@ function computeLabelHtml(zoom, callsign, ac) {
   }
   const rawType = ac?.aircraftType || "?";
   const type = AIRCRAFT_NAMES[rawType] || rawType;
-  const alt = ac?.altitude ? `FL${Math.round(ac.altitude/100)}` : "?";
+  const alt = ac?.altitude ? `FL${Math.round(ac.altitude / 100)}` : "?";
   const speed = ac?.speed ? `${Math.round(ac.speed)}kts` : "?";
   return `<div style="font-family: 'Roboto Mono', 'Consolas', monospace; font-size:13px; background:transparent; color:#fff; padding:4px 10px; border-radius:6px; white-space:nowrap; text-align:left; z-index:19349235;"><div>${displayCallsign}</div><div><span style='color:white;'>${type}</span> <span style='color:white;'>${alt}</span></div><div><span style='color:white;'>${speed}</span></div></div>`;
 }
@@ -258,73 +254,81 @@ function formatFlightPlans(planArray) {
   }, {});
 }
 
-ws.onmessage = (event) => {
-  const msg = JSON.parse(event.data);
+if (window['24data']) {
+  window['24data'].onMessage((data) => {
+    try {
+      const msg = JSON.parse(data);
 
-  if (msg.requestId && wsPending.has(msg.requestId)) {
-    wsPending.get(msg.requestId)(msg);
-    wsPending.delete(msg.requestId);
-    return;
-  }
-
-  switch (msg.type) {
-    case 'acft':
-      if (msg.payload) {
-        handleAircraftUpdate(msg.payload);
+      if (msg.requestId && wsPending.has(msg.requestId)) {
+        wsPending.get(msg.requestId)(msg);
+        wsPending.delete(msg.requestId);
+        return;
       }
-      break;
 
-    case 'eventacft':
-      if (msg.payload) {
-        // ur supposed to handle the event stuff but eh its event who really cares rn?
+      switch (msg.type) {
+        case 'acft':
+          if (msg.payload) {
+            handleAircraftUpdate(msg.payload);
+          }
+          break;
+
+        case 'eventacft':
+          if (msg.payload) {
+            // ur supposed to handle the event stuff but eh its event who really cares rn?
+          }
+          break;
+
+        case 'flightplans':
+          if (msg.payload && Array.isArray(msg.payload)) {
+            const formattedPlans = formatFlightPlans(msg.payload);
+            updateFlightPlans(formattedPlans);
+          }
+          break;
+
+        case 'eventflightplans':
+          if (msg.payload && Array.isArray(msg.payload)) {
+            const formattedPlans = formatFlightPlans(msg.payload);
+            updateEventFlightPlans(formattedPlans)
+          }
+          break;
+
+        case 'controllers':
+          if (msg.payload) {
+            //do smth with the controller data idk
+          }
+          break;
+
+        case 'notification':
+          if (msg.payload && msg.duration) {
+            notifier.show(msg.payload, msg.duration || 5000);
+          }
+          break;
+
+        default:
+          console.log("cooked websocket:", msg);
+          break;
       }
-      break;
+    } catch (e) {
+      console.error('Error handling message:', e);
+    }
+  });
 
-    case 'flightplans':
-      if (msg.payload && Array.isArray(msg.payload)) {
-        const formattedPlans = formatFlightPlans(msg.payload);
-        updateFlightPlans(formattedPlans);
-      }
-      break;
-
-    case 'eventflightplans':
-      if(msg.payload && Array.isArray(msg.payload)) {
-        const formattedPlans = formatFlightPlans(msg.payload);
-        updateEventFlightPlans(formattedPlans)
-      }
-      break;
-
-    case 'controllers':
-      if (msg.payload) {
-        //do smth with the controller data idk
-      }
-      break;
-
-    case 'notification':
-      if (msg.payload && msg.duration) {
-        notifier.show(msg.payload, msg.duration || 5000);
-      }
-      break;
-
-    default:
-      console.log("cooked websocket:", msg);
-      break;
-  }
-};
-
-ws.onclose = () => {
-  notifier.show("Connection lost. Please refresh the page.", 10000000000000);
-};
-
-ws.onerror = (err) => {
-  notifier.show("Connection error. Please refresh the page.", 100000000000000);
+  window['24data'].onUpdate((data) => {
+    if (data.status === 'offline') {
+      notifier.show("Connection lost. Please refresh the page.", 10000000000000);
+    }
+  });
+} else {
+  console.error('24data bridge missing!');
 }
 
 function wsSend(type, data) {
   return new Promise((resolve) => {
     const requestId = ++wsRequestId;
     wsPending.set(requestId, resolve);
-    ws.send(JSON.stringify({ type, requestId, ...data }));
+    if (window['24data']) {
+      window['24data'].send({ type, requestId, ...data });
+    }
   });
 }
 
@@ -357,7 +361,6 @@ async function handleAircraftUpdate(aircraft) {
     await updateSidebarData(selectedAircraftCallsign, aircraftData, flightPlan);
   }
 
-  // forward the latest aircraft data to the main process so Electron can forward to aircraft windows
   try {
     if (window.mapBridge && typeof window.mapBridge.sendAircraftData === 'function') {
       window.mapBridge.sendAircraftData(aircraft);
@@ -383,10 +386,10 @@ function updateFlightPlans(plans) {
 }
 
 function updateEventFlightPlans(plans) {
-    eventFlightPlans.clear();
-    for (const [robloxName, plan] of Object.entries(plans)) {
-        eventFlightPlans.set(robloxName, plan);
-    }
+  eventFlightPlans.clear();
+  for (const [robloxName, plan] of Object.entries(plans)) {
+    eventFlightPlans.set(robloxName, plan);
+  }
 }
 
 async function updateVisibleAircraftTrails() {
@@ -410,7 +413,6 @@ function openAircraftWindow(callsign) {
     if (window.windowControl && typeof window.windowControl.openAircraft === 'function') {
       window.windowControl.openAircraft(callsign);
     } else {
-      // fallback to opening a normal window if preload isn't present
       const name = `aircraft_${callsign}`;
       const url = `aircraft.html?callsign=${encodeURIComponent(callsign)}`;
       const features = 'width=420,height=520,resizable=yes,scrollbars=yes';
@@ -559,13 +561,13 @@ function updateUTCClock() {
 setInterval(updateUTCClock, 1000);
 
 if (typeof Fixes !== 'undefined' && Fixes && Fixes.length > 0) {
-    renderFixes(Fixes);
+  renderFixes(Fixes);
 } else {
-    console.error('Fixes data not loaded from data.js');
+  console.error('Fixes data not loaded from data.js');
 }
 
 function renderFixes(list) {
-  list.forEach(({ name, px, py, size, type}) => {
+  list.forEach(({ name, px, py, size, type }) => {
     iconurl = null;
     iconurl = null;
     const [lat, lng] = waypointPositionToLatLng(px, py);
@@ -573,40 +575,40 @@ function renderFixes(list) {
     if (type == "waypoint") {
       iconurl = "https://24flight.org/unified/icons/map/Fix.RNAVFlyOver.png"
       iconcss = "waypoint-black"
-    //airport
-    //airport w/ service and tower. basic airport
+      //airport
+      //airport w/ service and tower. basic airport
     } else if (type == "aprt.serv.twr") {
       iconurl = "https://24flight.org/unified/icons/map/1Airport.Serv.Tower.png";
       iconcss = "blue-label";
-    //seabase
+      //seabase
     } else if (type == "aprt.seabase") {
       iconurl = "https://24flight.org/unified/icons/map/2Airport.Seabase.png";
       iconcss = "pink-label";
-    //private airport w/ a tower
+      //private airport w/ a tower
     } else if (type == "aprt.priv.twr") {
       iconurl = "https://24flight.org/unified/icons/map/3Airport.Private.Tower.png";
       iconcss = "blue-label";
-    //normal airport
+      //normal airport
     } else if (type == "aprt") {
       iconurl = "https://24flight.org/unified/icons/map/4Airport.png";
       iconcss = "pink-label";
-    //military w/ tower
+      //military w/ tower
     } else if (type == "aprt.mltry.twr") {
       iconurl = "https://24flight.org/unified/icons/map/5Airport.Military.Tower.png";
       iconcss = "blue-label";
-    //military airport
+      //military airport
     } else if (type == "aprt.mltry") {
       iconurl = "https://24flight.org/unified/icons/map/6Airport.Military.png";
       iconcss = "pink-label";
-    //airport service
+      //airport service
     } else if (type == "aprt.serv") {
       iconurl = "https://24flight.org/unified/icons/map/7Airport.Service.png";
       iconcss = "pink-label";
-    //private airport
+      //private airport
     } else if (type == "aprt.priv") {
       iconurl = "https://24flight.org/unified/icons/map/8Airport.Private.png";
       iconcss = "pink-label";
-    //airport w/ a tower
+      //airport w/ a tower
     } else if (type == "aprt.twr") {
       iconurl = "https://24flight.org/unified/icons/map/9Airport.Tower.png";
       iconcss = "blue-label";

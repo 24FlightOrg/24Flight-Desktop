@@ -1,8 +1,9 @@
 import { app, BrowserWindow, Menu, ipcMain, safeStorage } from 'electron';
 import path from 'path';
-import { fileURLToPath, pathToFileURL } from 'url';
+import { fileURLToPath } from 'url';
 import fs from 'fs';
 import express from "express";
+import { initWS, sendWS } from './ws/24data.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,7 +15,7 @@ const aircraftWindows = new Map();
 const server = express();
 const SERVER_PORT = 24000;
 
-server.use(express.static(path.join(__dirname, "src")));
+server.use(express.static(path.join(__dirname, "../frontend")));
 
 server.listen(SERVER_PORT, () => {
   console.log("Local Express server running on http://localhost:" + SERVER_PORT);
@@ -80,7 +81,7 @@ function deleteStoredToken() {
 app.whenReady().then(async () => {
   let isLoggedIn = false;
   const storedToken = getStoredToken();
-  
+
   if (storedToken) {
     console.log('found token, validating...');
     const isValid = await validateToken(storedToken);
@@ -97,23 +98,28 @@ app.whenReady().then(async () => {
     console.log('no stored token found');
     isLoggedIn = false;
   }
-  
+
   let windowHeight = 600;
+  let windowWidth = 800;
   let filePath;
+
   if (isLoggedIn) {
     filePath = `http://localhost:${SERVER_PORT}/index.html`
-    windowHeight = 300;
+    windowHeight = 650;
+    windowWidth = 1000;
   } else {
     filePath = `http://localhost:${SERVER_PORT}/login.html`
+    windowHeight = 600;
+    windowWidth = 800;
   }
-  
+
   win = new BrowserWindow({
-    width: 800,
+    width: windowWidth,
     height: windowHeight,
-    icon: path.join(__dirname, 'build/icon.ico'),
+    icon: path.join(process.cwd(), 'build/icons/png/1024x1024.png'),
     frame: false,
     webPreferences: {
-      devTools: true,
+      devTools: false,
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
@@ -124,6 +130,10 @@ app.whenReady().then(async () => {
   win.on('closed', () => {
     app.quit();
   });
+
+  // Initialize WebSocket for this window
+  initWS(win);
+
   win.loadURL(filePath);
   Menu.setApplicationMenu(null);
 });
@@ -155,7 +165,6 @@ ipcMain.handle('window-close', (event) => {
   try {
     const senderWin = BrowserWindow.fromWebContents(event.sender);
     if (!senderWin || senderWin.isDestroyed()) return;
-    // If this is the main window, closing it will trigger the existing 'closed' handler which quits the app.
     senderWin.close();
   } catch (e) {
     console.error('window-close error:', e);
@@ -195,10 +204,10 @@ ipcMain.handle('open-login', async () => {
             finished = true;
             user_session_token = token;
             saveToken(token);
-            
+
             const indexPath = `http://localhost:${SERVER_PORT}/index.html`
             win.loadURL(indexPath);
-            
+
             resolve(token);
             if (!oauthWindow.isDestroyed()) oauthWindow.close();
           }
@@ -242,6 +251,7 @@ ipcMain.handle('get-token', async () => {
 });
 
 ipcMain.handle('get-username', async () => {
+  console.log('get-username invoked. Token exists:', !!user_session_token);
   if (!user_session_token) return null;
   try {
     const response = await fetch('https://24flight.org/oauth/@me', {
@@ -253,13 +263,50 @@ ipcMain.handle('get-username', async () => {
     });
     if (response.ok) {
       const data = await response.json();
+      console.log('get-username response data:', data);
       return data.username || null;
     } else {
+      console.log('get-username failed:', response.status, response.statusText);
       return null;
     }
   } catch (err) {
     console.error('Error fetching username:', err);
     return null;
+  }
+});
+
+ipcMain.handle('get-globalname', async () => {
+  console.log('get-globalname invoked. Token exists:', !!user_session_token);
+  if (!user_session_token) return null;
+  try {
+    const response = await fetch('https://24flight.org/oauth/@me', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user_session_token}`
+      }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log('get-globalname response data:', data);
+      return data.global_name || null;
+    } else {
+      console.log('get-globalname failed:', response.status, response.statusText);
+      return null;
+    }
+  } catch (err) {
+    console.error('Error fetching globalname:', err);
+    return null;
+  }
+});
+
+ipcMain.handle('get-app-version', () => {
+  try {
+    const packageJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8'));
+    return packageJson.version;
+  } catch (err) {
+    console.error('Error reading package.json:', err);
+    return 'Unknown';
   }
 });
 
@@ -353,4 +400,8 @@ ipcMain.on('flightplans-data', (event, plans) => {
   } catch (e) {
     console.error('Error forwarding flightplans-data:', e);
   }
+});
+
+ipcMain.on('ws-send', (event, data) => {
+  sendWS(data);
 });
