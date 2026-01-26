@@ -38,5 +38,6 @@ contextBridge.exposeInMainWorld('mapBridge', {
 contextBridge.exposeInMainWorld('24data', {
   onUpdate: (cb) => ipcRenderer.on('main-ws-update', (_, data) => cb(data)),
   onMessage: (cb) => ipcRenderer.on('main-ws-message', (_, data) => cb(data)),
-  send: (data) => ipcRenderer.send('ws-send', data)
+  send: (data) => ipcRenderer.send('ws-send', data),
+  getStatus: () => ipcRenderer.invoke('get-ws-status')
 });

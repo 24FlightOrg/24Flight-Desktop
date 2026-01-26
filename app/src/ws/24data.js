@@ -14,6 +14,11 @@ export function sendWS(data) {
     }
 }
 
+export function getWSStatus() {
+    if (ws && ws.readyState === WebSocket.OPEN) return 'online';
+    return 'offline';
+}
+
 export function initWS(mainWindow) {
     if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
         return;

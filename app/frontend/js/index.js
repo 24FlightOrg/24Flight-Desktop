@@ -8,10 +8,10 @@ async function init() {
       if (globalname) {
         greetingEl.textContent = globalname;
       } else {
-        greetingEl.textContent = 'Pilot';
+        greetingEl.textContent = 'Unknown';
       }
     } else {
-      greetingEl.textContent = 'Pilot';
+      greetingEl.textContent = 'Unknown';
     }
 
     // App Version
@@ -34,6 +34,20 @@ async function init() {
     };
 
     if (window['24data']) {
+      // Check initial status
+      try {
+        const initStatus = await window['24data'].getStatus();
+        if (initStatus === 'online') {
+          updateStatus(connectionStatusEl, 'online', 'Online', 'online', 'offline');
+          updateStatus(dataStreamEl, 'active', 'Active', 'active', 'inactive');
+        } else {
+          updateStatus(connectionStatusEl, 'offline', 'Offline', 'offline', 'online');
+          updateStatus(dataStreamEl, 'inactive', 'Inactive', 'inactive', 'active');
+        }
+      } catch (err) {
+        console.warn('Failed to get initial WS status:', err);
+      }
+
       window['24data'].onUpdate((data) => {
         if (data.status === 'online') {
           updateStatus(connectionStatusEl, 'online', 'Online', 'online', 'offline');

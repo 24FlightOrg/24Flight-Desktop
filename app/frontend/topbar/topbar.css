@@ -15,6 +15,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    -webkit-app-region: drag;
 }
 
 .top-bar-content {
@@ -25,7 +26,38 @@
     padding: 0 24px;
     box-sizing: border-box;
     flex: 1;
-    -webkit-app-region: drag;
+}
+
+.top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    transition: background-color 0.2s;
+    -webkit-app-region: no-drag;
+    margin: 0;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.top-bar-logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 0;
+    -webkit-app-region: no-drag;
 }
 
 .top-bar-title {
@@ -34,6 +66,10 @@
     color: white;
     margin: 0;
     letter-spacing: 1px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
 }
 
 .top-bar-username {

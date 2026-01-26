@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import express from "express";
-import { initWS, sendWS } from './ws/24data.js';
+import { initWS, sendWS, getWSStatus } from './ws/24data.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -131,7 +131,6 @@ app.whenReady().then(async () => {
     app.quit();
   });
 
-  // Initialize WebSocket for this window
   initWS(win);
 
   win.loadURL(filePath);
@@ -404,4 +403,8 @@ ipcMain.on('flightplans-data', (event, plans) => {
 
 ipcMain.on('ws-send', (event, data) => {
   sendWS(data);
+});
+
+ipcMain.handle('get-ws-status', () => {
+  return getWSStatus();
 });
