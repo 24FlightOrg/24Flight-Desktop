@@ -349,8 +349,8 @@ ipcMain.handle('open-aircraft-window', (event, callsign) => {
     }
 
     const aircraftWindow = new BrowserWindow({
-      width: 420,
-      height: 520,
+      width: 710,
+      height: 550,
       frame: false,
       resizable: true,
       webPreferences: {

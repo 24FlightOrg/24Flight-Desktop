@@ -2,36 +2,67 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- No native title: use custom top-bar only -->
-    <link rel="stylesheet" href="/topbar/topbar.css" />
-    <link rel="stylesheet" href="css/map.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aircraft</title>
+  <!-- No native title: use custom top-bar only -->
+  <link rel="stylesheet" href="/topbar/topbar.css" />
+  <link rel="stylesheet" href="css/aircraft.css" />
 </head>
 
 <body>
-    <div class="top-bar" id="top-bar"></div>
+  <div class="top-bar" id="top-bar"></div>
 
-    <div id="aircraft-info" style="padding:12px; color: white; font-family: Roboto, Arial, sans-serif;">
-      <div id="status" style="margin-bottom:8px; color:#ccc;">Loading...</div>
-      <div style="display:flex; flex-direction:column; gap:6px;">
-        <div><strong>Callsign:</strong> <span id="callsign">-</span></div>
-        <div><strong>Player:</strong> <span id="player">-</span></div>
-        <div><strong>Type:</strong> <span id="type">-</span></div>
-        <div><strong>Altitude:</strong> <span id="alt">-</span></div>
-        <div><strong>Speed:</strong> <span id="spd">-</span></div>
-        <div><strong>Heading:</strong> <span id="hdg">-</span></div>
-        <div><strong>Position:</strong> <span id="pos">-</span></div>
-        <div><strong>Flightplan Callsign:</strong> <span id="fp-callsign">-</span></div>
+  <div id="aircraft-info">
+    <div class="aircraft-card">
+      <div class="status-header">
+        <span class="status-label">Status</span>
+        <div id="status">Loading...</div>
+      </div>
+
+      <div class="data-grid">
+        <div class="data-item callsign">
+          <span class="data-label">Callsign</span>
+          <span class="data-value" id="callsign">-</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Player</span>
+          <span class="data-value" id="player">-</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Flightplan Callsign</span>
+          <span class="data-value" id="fp-callsign">-</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Type</span>
+          <span class="data-value" id="type">-</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Altitude</span>
+          <span class="data-value" id="alt">-</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Speed</span>
+          <span class="data-value" id="spd">-</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Heading</span>
+          <span class="data-value" id="hdg">-</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Position</span>
+          <span class="data-value" id="pos">-</span>
+        </div>
       </div>
     </div>
+  </div>
 
-    <script>
-        // Default topbar title; overridden once we resolve the proper callsign
-        window.topBarSettings = { title: 'Aircraft' };
-    </script>
-    <script src="/topbar/topbar.js"></script>
-    <script src="js/aircraft.js"></script>
+  <script>
+    // Default topbar title; overridden once we resolve the proper callsign
+    window.topBarSettings = { title: 'Aircraft' };
+  </script>
+  <script src="/topbar/topbar.js"></script>
+  <script src="js/aircraft.js"></script>
 </body>
 
 </html>

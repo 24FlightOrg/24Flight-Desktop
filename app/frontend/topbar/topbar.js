@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const secondaryPaths = ['/areas/aircraft.html'];
   const isSecondaryWindow = secondaryPaths.some(path => window.location.pathname.includes(path));
 
-  if (!isSecondaryWindow) {
+  if (!isSecondaryWindow && !window.topBarSettings?.hideNav) {
     if (navHome) {
       const currentPath = window.location.pathname;
       if (currentPath !== '/' && currentPath !== '/index.html') {

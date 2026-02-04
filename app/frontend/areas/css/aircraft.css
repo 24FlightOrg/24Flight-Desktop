@@ -1,0 +1,117 @@
+:root {
+    --bg-color: #1a1a1a;
+    --card-bg: #252526;
+    --text-primary: #ffffff;
+    --text-secondary: #aaaaaa;
+    --border-color: #3e3e42;
+    --accent-color: #007acc;
+    --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    overflow: hidden;
+    /* Main window scroll handled by .page-wrap usually, or specific container */
+}
+
+/* Ensure top-bar spacing if not handled by global styles */
+.top-bar+.content {
+    margin-top: 60px;
+}
+
+#aircraft-info {
+    padding: 24px;
+    max-width: 600px;
+    margin: 80px auto 0;
+    /* Center and push down below topbar */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.aircraft-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.status-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.status-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+#status {
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.data-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.data-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.data-value {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 12px;
+    border-radius: 4px;
+    border-left: 3px solid var(--accent-color);
+    min-height: 24px;
+    /* avoid jump if empty */
+    display: flex;
+    align-items: center;
+}
+
+/* Specific styling for Call Sign to make it pop */
+.data-item.callsign .data-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    border-left-color: #fff;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
