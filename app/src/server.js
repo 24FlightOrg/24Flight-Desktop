@@ -4,6 +4,8 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import express from "express";
 import { initWS, sendWS, getWSStatus } from './ws/24data.js';
+import discordrpcimport from './ipc/discord.cjs'
+const { setupRPC, getStartTimestamp, setStartTimestamp } = discordrpcimport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,6 +13,7 @@ const __dirname = path.dirname(__filename);
 let win;
 let user_session_token;
 const aircraftWindows = new Map();
+let rpc = setupRPC();
 
 const server = express();
 const SERVER_PORT = 24000;
@@ -407,4 +410,8 @@ ipcMain.on('ws-send', (event, data) => {
 
 ipcMain.handle('get-ws-status', () => {
   return getWSStatus();
+});
+
+ipcMain.handle('update-discord-activity', (event, state) => {
+  updateActivity(state);
 });

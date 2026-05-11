@@ -41,3 +41,7 @@ contextBridge.exposeInMainWorld('24data', {
   send: (data) => ipcRenderer.send('ws-send', data),
   getStatus: () => ipcRenderer.invoke('get-ws-status')
 });
+
+contextBridge.exposeInMainWorld('discordRPC', {
+  updateActivity: (state) => ipcRenderer.invoke('update-discord-activity', state),
+});
