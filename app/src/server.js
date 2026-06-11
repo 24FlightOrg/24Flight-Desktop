@@ -304,10 +304,9 @@ ipcMain.handle('get-globalname', async () => {
 
 ipcMain.handle('get-app-version', () => {
   try {
-    const packageJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8'));
-    return packageJson.version;
+    return app.getVersion();
   } catch (err) {
-    console.error('Error reading package.json:', err);
+    console.error('Error getting app version:', err);
     return 'Unknown';
   }
 });

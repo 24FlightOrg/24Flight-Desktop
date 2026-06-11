@@ -1,4 +1,5 @@
 import WebSocket from 'ws';
+import { Notification } from 'electron';
 
 let ws;
 let reconnectInterval;
@@ -28,7 +29,7 @@ export function initWS(mainWindow) {
         ws = new WebSocket('wss://24flight.org/ws');
 
         ws.on('open', () => {
-            console.log('WS Connected to central server');
+            console.log('WS | Connected');
             if (reconnectInterval) {
                 clearInterval(reconnectInterval);
                 reconnectInterval = null;
@@ -39,7 +40,7 @@ export function initWS(mainWindow) {
         });
 
         ws.on('close', () => {
-            console.log('WS Disconnected, retrying in 5s...');
+            console.log('WS | Disconnected, retrying in 5s...');
             if (mainWindow && !mainWindow.isDestroyed()) {
                 mainWindow.webContents.send('main-ws-update', { status: 'offline' });
             }
@@ -47,7 +48,7 @@ export function initWS(mainWindow) {
         });
 
         ws.on('error', (e) => {
-            console.error('WS Error:', e.message);
+            console.error('WS | Error:', e.message);
             if (mainWindow && !mainWindow.isDestroyed()) {
                 mainWindow.webContents.send('main-ws-update', { status: 'offline' });
             }
@@ -56,17 +57,32 @@ export function initWS(mainWindow) {
         ws.on('message', (data) => {
             try {
                 const str = data.toString();
-                // Forward raw message string to renderer
+                let parsed;
+
+                try {
+                    parsed = JSON.parse(str);
+                } catch (parseErr) {
+                    parsed = null;
+                }
+
+                if (parsed && parsed.type === 'notification') {
+                    const payload = parsed.payload ?? str;
+                    new Notification({
+                        title: '24Flight System Notification',
+                        body: typeof payload === 'string' ? payload : JSON.stringify(payload)
+                    }).show();
+                }
+
                 if (mainWindow && !mainWindow.isDestroyed()) {
                     mainWindow.webContents.send('main-ws-message', str);
                 }
             } catch (err) {
-                console.error('Error forwarding WS message:', err);
+                console.error('WS | Error forwarding message:', err);
             }
         });
 
     } catch (err) {
-        console.error('Failed to init WS:', err);
+        console.error('WS | Failed to init:', err);
         startReconnect(mainWindow);
     }
 }
