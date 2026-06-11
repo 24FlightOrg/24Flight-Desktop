@@ -1,4 +1,21 @@
 async function init() {
+  const greetings = [
+    "Welcome back,",
+    "Hello,",
+    "Good to see you,",
+    "Hi there,",
+    "Greetings,",
+    "Salutations,",
+    "Howdy,",
+    "Ahoy,",
+    "Welcome,",
+    "Nice to see you,",
+    "Hey,",
+    "Welcome aboard,",
+    "Top of the morning,",
+    "Good day,",
+  ];
+  
   try {
     const greetingEl = document.getElementById('username-display');
 

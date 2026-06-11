@@ -88,6 +88,16 @@
     },
     "files": [
       "**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "autopilot",
+        "to": "autopilot",
+        "filter": ["**/*"]
+      }
+    ],
+    "asarUnpack": [
+      "autopilot/**"
     ]
   },
   "dependencies": {
