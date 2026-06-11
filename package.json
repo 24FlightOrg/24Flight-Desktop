@@ -17,15 +17,18 @@
   "contributors": [
     {
       "name": "GreenvillSSnick",
-      "url": "https://github.com/GreenvillSSnick"
+      "url": "https://github.com/GreenvillSSnick",
+      "email": "green@24flight.org"
     },
     {
       "name": "scythe_dev",
-      "url": "https://github.com/PilotJDK"
+      "url": "https://github.com/PilotJDK",
+      "email": "scythe@24flight.org"
     },
     {
       "name": "awdev",
-      "url": "https://github.com/awdev1"
+      "url": "https://github.com/awdev1",
+      "email": "awdev@24flight.org"
     }
   ],
   "scripts": {
