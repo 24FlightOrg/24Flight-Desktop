@@ -61,8 +61,8 @@ events:
         - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\CMake\\bin"
-        - "%NVM_HOME%"
-        - "%NVM_SYMLINK%"
+        - "C:\\Users\\dev\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\"
         - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
@@ -97,7 +97,7 @@ events:
       The output was:
       0
       MSBuild version 18.7.1+024f5b037 for .NET Framework
-      Build started 6/11/2026 10:35:48 PM.
+      Build started 6/12/2026 12:19:43 AM.
       
       Project "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\4.3.3\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -126,7 +126,7 @@ events:
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:00.60
+      Time Elapsed 00:00:00.70
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -178,8 +178,8 @@ events:
       - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/CMake/bin/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/"
+      - "C:/Users/dev/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/170/Tools/Binn/"
       - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
@@ -192,8 +192,6 @@ events:
       - "C:/Users/dev/AppData/Local/Microsoft/WinGet/Links/"
       - "C:/Users/dev/AppData/Local/PowerToys/DSCModules/"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/"
-      - "C:/Users/dev/AppData/Local/nvm/"
-      - "C:/nvm4w/nodejs/"
       - "C:/Users/dev/.lmstudio/bin/"
       - "C:/msys64/ucrt64/bin/"
       - "C:/Users/dev/.dotnet/tools/"
@@ -229,8 +227,8 @@ events:
         - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\CMake\\bin"
-        - "%NVM_HOME%"
-        - "%NVM_SYMLINK%"
+        - "C:\\Users\\dev\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\"
         - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
@@ -291,8 +289,8 @@ events:
       - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/CMake/bin/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/"
+      - "C:/Users/dev/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/170/Tools/Binn/"
       - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
@@ -305,8 +303,6 @@ events:
       - "C:/Users/dev/AppData/Local/Microsoft/WinGet/Links/"
       - "C:/Users/dev/AppData/Local/PowerToys/DSCModules/"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/"
-      - "C:/Users/dev/AppData/Local/nvm/"
-      - "C:/nvm4w/nodejs/"
       - "C:/Users/dev/.lmstudio/bin/"
       - "C:/msys64/ucrt64/bin/"
       - "C:/Users/dev/.dotnet/tools/"
@@ -372,12 +368,12 @@ events:
       - "C:/Program Files/CMake/bin/lld-link.com"
       - "C:/Program Files/CMake/bin/lld-link.exe"
       - "C:/Program Files/CMake/bin/lld-link"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/lld-link.com"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/lld-link.exe"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/lld-link"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/lld-link.com"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/lld-link.exe"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/lld-link"
+      - "C:/Users/dev/AppData/Local/nvm/lld-link.com"
+      - "C:/Users/dev/AppData/Local/nvm/lld-link.exe"
+      - "C:/Users/dev/AppData/Local/nvm/lld-link"
+      - "C:/nvm4w/nodejs/lld-link.com"
+      - "C:/nvm4w/nodejs/lld-link.exe"
+      - "C:/nvm4w/nodejs/lld-link"
       - "C:/Program Files/Git/cmd/lld-link.com"
       - "C:/Program Files/Git/cmd/lld-link.exe"
       - "C:/Program Files/Git/cmd/lld-link"
@@ -414,12 +410,6 @@ events:
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/lld-link.com"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/lld-link.exe"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/lld-link"
-      - "C:/Users/dev/AppData/Local/nvm/lld-link.com"
-      - "C:/Users/dev/AppData/Local/nvm/lld-link.exe"
-      - "C:/Users/dev/AppData/Local/nvm/lld-link"
-      - "C:/nvm4w/nodejs/lld-link.com"
-      - "C:/nvm4w/nodejs/lld-link.exe"
-      - "C:/nvm4w/nodejs/lld-link"
       - "C:/Users/dev/.lmstudio/bin/lld-link.com"
       - "C:/Users/dev/.lmstudio/bin/lld-link.exe"
       - "C:/Users/dev/.lmstudio/bin/lld-link"
@@ -461,8 +451,8 @@ events:
         - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\CMake\\bin"
-        - "%NVM_HOME%"
-        - "%NVM_SYMLINK%"
+        - "C:\\Users\\dev\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\"
         - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
@@ -521,8 +511,8 @@ events:
       - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/CMake/bin/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/"
+      - "C:/Users/dev/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/170/Tools/Binn/"
       - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
@@ -535,8 +525,6 @@ events:
       - "C:/Users/dev/AppData/Local/Microsoft/WinGet/Links/"
       - "C:/Users/dev/AppData/Local/PowerToys/DSCModules/"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/"
-      - "C:/Users/dev/AppData/Local/nvm/"
-      - "C:/nvm4w/nodejs/"
       - "C:/Users/dev/.lmstudio/bin/"
       - "C:/msys64/ucrt64/bin/"
       - "C:/Users/dev/.dotnet/tools/"
@@ -572,8 +560,8 @@ events:
         - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\CMake\\bin"
-        - "%NVM_HOME%"
-        - "%NVM_SYMLINK%"
+        - "C:\\Users\\dev\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\"
         - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
@@ -632,8 +620,8 @@ events:
       - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/CMake/bin/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/"
+      - "C:/Users/dev/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/170/Tools/Binn/"
       - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
@@ -646,8 +634,6 @@ events:
       - "C:/Users/dev/AppData/Local/Microsoft/WinGet/Links/"
       - "C:/Users/dev/AppData/Local/PowerToys/DSCModules/"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/"
-      - "C:/Users/dev/AppData/Local/nvm/"
-      - "C:/nvm4w/nodejs/"
       - "C:/Users/dev/.lmstudio/bin/"
       - "C:/msys64/ucrt64/bin/"
       - "C:/Users/dev/.dotnet/tools/"
@@ -713,12 +699,12 @@ events:
       - "C:/Program Files/CMake/bin/mt.com"
       - "C:/Program Files/CMake/bin/mt.exe"
       - "C:/Program Files/CMake/bin/mt"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/mt.com"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/mt.exe"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/mt"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/mt.com"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/mt.exe"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/mt"
+      - "C:/Users/dev/AppData/Local/nvm/mt.com"
+      - "C:/Users/dev/AppData/Local/nvm/mt.exe"
+      - "C:/Users/dev/AppData/Local/nvm/mt"
+      - "C:/nvm4w/nodejs/mt.com"
+      - "C:/nvm4w/nodejs/mt.exe"
+      - "C:/nvm4w/nodejs/mt"
       - "C:/Program Files/Git/cmd/mt.com"
       - "C:/Program Files/Git/cmd/mt.exe"
       - "C:/Program Files/Git/cmd/mt"
@@ -755,12 +741,6 @@ events:
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/mt.com"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/mt.exe"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/mt"
-      - "C:/Users/dev/AppData/Local/nvm/mt.com"
-      - "C:/Users/dev/AppData/Local/nvm/mt.exe"
-      - "C:/Users/dev/AppData/Local/nvm/mt"
-      - "C:/nvm4w/nodejs/mt.com"
-      - "C:/nvm4w/nodejs/mt.exe"
-      - "C:/nvm4w/nodejs/mt"
       - "C:/Users/dev/.lmstudio/bin/mt.com"
       - "C:/Users/dev/.lmstudio/bin/mt.exe"
       - "C:/Users/dev/.lmstudio/bin/mt"
@@ -802,8 +782,8 @@ events:
         - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\CMake\\bin"
-        - "%NVM_HOME%"
-        - "%NVM_SYMLINK%"
+        - "C:\\Users\\dev\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\"
         - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
@@ -862,8 +842,8 @@ events:
       - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/CMake/bin/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/"
+      - "C:/Users/dev/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/170/Tools/Binn/"
       - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
@@ -876,8 +856,6 @@ events:
       - "C:/Users/dev/AppData/Local/Microsoft/WinGet/Links/"
       - "C:/Users/dev/AppData/Local/PowerToys/DSCModules/"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/"
-      - "C:/Users/dev/AppData/Local/nvm/"
-      - "C:/nvm4w/nodejs/"
       - "C:/Users/dev/.lmstudio/bin/"
       - "C:/msys64/ucrt64/bin/"
       - "C:/Users/dev/.dotnet/tools/"
@@ -913,8 +891,8 @@ events:
         - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\CMake\\bin"
-        - "%NVM_HOME%"
-        - "%NVM_SYMLINK%"
+        - "C:\\Users\\dev\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\"
         - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
@@ -986,8 +964,8 @@ events:
         - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\CMake\\bin"
-        - "%NVM_HOME%"
-        - "%NVM_SYMLINK%"
+        - "C:\\Users\\dev\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\"
         - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
@@ -1022,7 +1000,7 @@ events:
       The output was:
       0
       MSBuild version 18.7.1+024f5b037 for .NET Framework
-      Build started 6/11/2026 10:35:49 PM.
+      Build started 6/12/2026 12:19:45 AM.
       
       Project "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\4.3.3\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -1051,7 +1029,7 @@ events:
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:00.61
+      Time Elapsed 00:00:00.64
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -1103,8 +1081,8 @@ events:
       - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/CMake/bin/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/"
+      - "C:/Users/dev/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/170/Tools/Binn/"
       - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
@@ -1117,8 +1095,6 @@ events:
       - "C:/Users/dev/AppData/Local/Microsoft/WinGet/Links/"
       - "C:/Users/dev/AppData/Local/PowerToys/DSCModules/"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/"
-      - "C:/Users/dev/AppData/Local/nvm/"
-      - "C:/nvm4w/nodejs/"
       - "C:/Users/dev/.lmstudio/bin/"
       - "C:/msys64/ucrt64/bin/"
       - "C:/Users/dev/.dotnet/tools/"
@@ -1184,12 +1160,12 @@ events:
       - "C:/Program Files/CMake/bin/lld-link.com"
       - "C:/Program Files/CMake/bin/lld-link.exe"
       - "C:/Program Files/CMake/bin/lld-link"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/lld-link.com"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/lld-link.exe"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/lld-link"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/lld-link.com"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/lld-link.exe"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/lld-link"
+      - "C:/Users/dev/AppData/Local/nvm/lld-link.com"
+      - "C:/Users/dev/AppData/Local/nvm/lld-link.exe"
+      - "C:/Users/dev/AppData/Local/nvm/lld-link"
+      - "C:/nvm4w/nodejs/lld-link.com"
+      - "C:/nvm4w/nodejs/lld-link.exe"
+      - "C:/nvm4w/nodejs/lld-link"
       - "C:/Program Files/Git/cmd/lld-link.com"
       - "C:/Program Files/Git/cmd/lld-link.exe"
       - "C:/Program Files/Git/cmd/lld-link"
@@ -1226,12 +1202,6 @@ events:
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/lld-link.com"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/lld-link.exe"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/lld-link"
-      - "C:/Users/dev/AppData/Local/nvm/lld-link.com"
-      - "C:/Users/dev/AppData/Local/nvm/lld-link.exe"
-      - "C:/Users/dev/AppData/Local/nvm/lld-link"
-      - "C:/nvm4w/nodejs/lld-link.com"
-      - "C:/nvm4w/nodejs/lld-link.exe"
-      - "C:/nvm4w/nodejs/lld-link"
       - "C:/Users/dev/.lmstudio/bin/lld-link.com"
       - "C:/Users/dev/.lmstudio/bin/lld-link.exe"
       - "C:/Users/dev/.lmstudio/bin/lld-link"
@@ -1273,8 +1243,8 @@ events:
         - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\CMake\\bin"
-        - "%NVM_HOME%"
-        - "%NVM_SYMLINK%"
+        - "C:\\Users\\dev\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\"
         - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
@@ -1335,8 +1305,8 @@ events:
       - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/CMake/bin/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/"
+      - "C:/Users/dev/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/170/Tools/Binn/"
       - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
@@ -1349,8 +1319,6 @@ events:
       - "C:/Users/dev/AppData/Local/Microsoft/WinGet/Links/"
       - "C:/Users/dev/AppData/Local/PowerToys/DSCModules/"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/"
-      - "C:/Users/dev/AppData/Local/nvm/"
-      - "C:/nvm4w/nodejs/"
       - "C:/Users/dev/.lmstudio/bin/"
       - "C:/msys64/ucrt64/bin/"
       - "C:/Users/dev/.dotnet/tools/"
@@ -1425,12 +1393,12 @@ events:
       - "C:/Program Files/CMake/bin/rc.com"
       - "C:/Program Files/CMake/bin/rc.exe"
       - "C:/Program Files/CMake/bin/rc"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/rc.com"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/rc.exe"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_HOME%/rc"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/rc.com"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/rc.exe"
-      - "C:/Users/dev/Documents/24Flight/24FlightSystem/%NVM_SYMLINK%/rc"
+      - "C:/Users/dev/AppData/Local/nvm/rc.com"
+      - "C:/Users/dev/AppData/Local/nvm/rc.exe"
+      - "C:/Users/dev/AppData/Local/nvm/rc"
+      - "C:/nvm4w/nodejs/rc.com"
+      - "C:/nvm4w/nodejs/rc.exe"
+      - "C:/nvm4w/nodejs/rc"
       - "C:/Program Files/Git/cmd/rc.com"
       - "C:/Program Files/Git/cmd/rc.exe"
       - "C:/Program Files/Git/cmd/rc"
@@ -1467,12 +1435,6 @@ events:
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/rc.com"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/rc.exe"
       - "C:/Users/dev/AppData/Local/Programs/Microsoft VS Code Insiders/bin/rc"
-      - "C:/Users/dev/AppData/Local/nvm/rc.com"
-      - "C:/Users/dev/AppData/Local/nvm/rc.exe"
-      - "C:/Users/dev/AppData/Local/nvm/rc"
-      - "C:/nvm4w/nodejs/rc.com"
-      - "C:/nvm4w/nodejs/rc.exe"
-      - "C:/nvm4w/nodejs/rc"
       - "C:/Users/dev/.lmstudio/bin/rc.com"
       - "C:/Users/dev/.lmstudio/bin/rc.exe"
       - "C:/Users/dev/.lmstudio/bin/rc"
@@ -1550,8 +1512,8 @@ events:
         - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\CMake\\bin"
-        - "%NVM_HOME%"
-        - "%NVM_SYMLINK%"
+        - "C:\\Users\\dev\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\"
         - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
@@ -1585,8 +1547,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-kqqhsq"
-      binary: "C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-kqqhsq"
+      source: "C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-m7b564"
+      binary: "C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-m7b564"
     cmakeVariables:
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
@@ -1596,39 +1558,39 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-kqqhsq'
+        Change Dir: 'C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-m7b564'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_fad40.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_4f59c.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
         MSBuild version 18.7.1+024f5b037 for .NET Framework
-        Build started 6/11/2026 10:35:50 PM.
+        Build started 6/12/2026 12:19:46 AM.
         
-        Project "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kqqhsq\\cmTC_fad40.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-m7b564\\cmTC_4f59c.vcxproj" on node 1 (default targets).
         PrepareForBuild:
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kqqhsq\\Debug\\".
-          Creating directory "cmTC_fad40.dir\\Debug\\cmTC_fad40.tlog\\".
+          Creating directory "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-m7b564\\Debug\\".
+          Creating directory "cmTC_4f59c.dir\\Debug\\cmTC_4f59c.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_fad40.dir\\Debug\\cmTC_fad40.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_fad40.dir\\Debug\\cmTC_fad40.tlog\\unsuccessfulbuild".
+          Creating "cmTC_4f59c.dir\\Debug\\cmTC_4f59c.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_4f59c.dir\\Debug\\cmTC_4f59c.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_fad40.dir\\Debug\\\\" /Fd"cmTC_fad40.dir\\Debug\\vc145.pdb" /external:W3 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_4f59c.dir\\Debug\\\\" /Fd"cmTC_4f59c.dir\\Debug\\vc145.pdb" /external:W3 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCCompilerABI.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36247 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_fad40.dir\\Debug\\\\" /Fd"cmTC_fad40.dir\\Debug\\vc145.pdb" /external:W3 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCCompilerABI.c"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_4f59c.dir\\Debug\\\\" /Fd"cmTC_4f59c.dir\\Debug\\vc145.pdb" /external:W3 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCCompilerABI.c"
           CMakeCCompilerABI.c
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kqqhsq\\Debug\\cmTC_fad40.exe" /INCREMENTAL /ILK:"cmTC_fad40.dir\\Debug\\cmTC_fad40.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-kqqhsq/Debug/cmTC_fad40.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-kqqhsq/Debug/cmTC_fad40.lib" /MACHINE:X64  /machine:x64 cmTC_fad40.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_fad40.vcxproj -> C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kqqhsq\\Debug\\cmTC_fad40.exe
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-m7b564\\Debug\\cmTC_4f59c.exe" /INCREMENTAL /ILK:"cmTC_4f59c.dir\\Debug\\cmTC_4f59c.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-m7b564/Debug/cmTC_4f59c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-m7b564/Debug/cmTC_4f59c.lib" /MACHINE:X64  /machine:x64 cmTC_4f59c.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_4f59c.vcxproj -> C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-m7b564\\Debug\\cmTC_4f59c.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_fad40.dir\\Debug\\cmTC_fad40.tlog\\unsuccessfulbuild".
-          Touching "cmTC_fad40.dir\\Debug\\cmTC_fad40.tlog\\cmTC_fad40.lastbuildstate".
-        Done Building Project "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kqqhsq\\cmTC_fad40.vcxproj" (default targets).
+          Deleting file "cmTC_4f59c.dir\\Debug\\cmTC_4f59c.tlog\\unsuccessfulbuild".
+          Touching "cmTC_4f59c.dir\\Debug\\cmTC_4f59c.tlog\\cmTC_4f59c.lastbuildstate".
+        Done Building Project "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-m7b564\\cmTC_4f59c.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:00.57
+        Time Elapsed 00:00:00.64
         
       exitCode: 0
   -
@@ -1668,8 +1630,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-parhhl"
-      binary: "C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-parhhl"
+      source: "C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-utn07e"
+      binary: "C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-utn07e"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -1680,33 +1642,33 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-parhhl'
+        Change Dir: 'C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-utn07e'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_0579a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_3c921.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
         MSBuild version 18.7.1+024f5b037 for .NET Framework
-        Build started 6/11/2026 10:35:51 PM.
+        Build started 6/12/2026 12:19:47 AM.
         
-        Project "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-parhhl\\cmTC_0579a.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-utn07e\\cmTC_3c921.vcxproj" on node 1 (default targets).
         PrepareForBuild:
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-parhhl\\Debug\\".
-          Creating directory "cmTC_0579a.dir\\Debug\\cmTC_0579a.tlog\\".
+          Creating directory "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-utn07e\\Debug\\".
+          Creating directory "cmTC_3c921.dir\\Debug\\cmTC_3c921.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_0579a.dir\\Debug\\cmTC_0579a.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_0579a.dir\\Debug\\cmTC_0579a.tlog\\unsuccessfulbuild".
+          Creating "cmTC_3c921.dir\\Debug\\cmTC_3c921.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_3c921.dir\\Debug\\cmTC_3c921.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GR /Fo"cmTC_0579a.dir\\Debug\\\\" /Fd"cmTC_0579a.dir\\Debug\\vc145.pdb" /external:W3 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GR /Fo"cmTC_3c921.dir\\Debug\\\\" /Fd"cmTC_3c921.dir\\Debug\\vc145.pdb" /external:W3 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCXXCompilerABI.cpp"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36247 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GR /Fo"cmTC_0579a.dir\\Debug\\\\" /Fd"cmTC_0579a.dir\\Debug\\vc145.pdb" /external:W3 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GR /Fo"cmTC_3c921.dir\\Debug\\\\" /Fd"cmTC_3c921.dir\\Debug\\vc145.pdb" /external:W3 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-parhhl\\Debug\\cmTC_0579a.exe" /INCREMENTAL /ILK:"cmTC_0579a.dir\\Debug\\cmTC_0579a.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-parhhl/Debug/cmTC_0579a.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-parhhl/Debug/cmTC_0579a.lib" /MACHINE:X64  /machine:x64 cmTC_0579a.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_0579a.vcxproj -> C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-parhhl\\Debug\\cmTC_0579a.exe
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-utn07e\\Debug\\cmTC_3c921.exe" /INCREMENTAL /ILK:"cmTC_3c921.dir\\Debug\\cmTC_3c921.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-utn07e/Debug/cmTC_3c921.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/CMakeFiles/CMakeScratch/TryCompile-utn07e/Debug/cmTC_3c921.lib" /MACHINE:X64  /machine:x64 cmTC_3c921.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_3c921.vcxproj -> C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-utn07e\\Debug\\cmTC_3c921.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_0579a.dir\\Debug\\cmTC_0579a.tlog\\unsuccessfulbuild".
-          Touching "cmTC_0579a.dir\\Debug\\cmTC_0579a.tlog\\cmTC_0579a.lastbuildstate".
-        Done Building Project "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-parhhl\\cmTC_0579a.vcxproj" (default targets).
+          Deleting file "cmTC_3c921.dir\\Debug\\cmTC_3c921.tlog\\unsuccessfulbuild".
+          Touching "cmTC_3c921.dir\\Debug\\cmTC_3c921.tlog\\cmTC_3c921.lastbuildstate".
+        Done Building Project "C:\\Users\\dev\\Documents\\24Flight\\24FlightSystem\\autopilot\\build\\CMakeFiles\\CMakeScratch\\TryCompile-utn07e\\cmTC_3c921.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
