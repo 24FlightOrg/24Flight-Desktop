@@ -33,12 +33,14 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx electron .",
-    "build": "npx electron-builder --win --mac",
-    "build:all": "npx electron-builder --win --mac --linux",
-    "build:linux": "npx electron-builder --linux",
-    "build:mac": "npx electron-builder --mac",
-    "build:win": "npx electron-builder --win"
+    "build:autopilot": "node scripts/build-autopilot.js",
+    "build:win-e:autopilot": "powershell -NoProfile -Command \"if (Test-Path 'autopilot/build') { Remove-Item 'autopilot/build' -Recurse -Force -ErrorAction SilentlyContinue }\" && cmake -S autopilot -B autopilot/build -G \"Visual Studio 18 2026\" -A x64 && cmake --build autopilot/build --config Release",
+    "start": "npm run build:autopilot && npx electron .",
+    "build": "npm run build:autopilot && npx electron-builder --win --mac",
+    "build:all": "npm run build:autopilot && npx electron-builder --win --mac --linux",
+    "build:linux": "npm run build:autopilot && npx electron-builder --linux",
+    "build:mac": "npm run build:autopilot && npx electron-builder --mac",
+    "build:win": "npm run build:autopilot && npx electron-builder --win"
   },
   "devDependencies": {
     "electron": "^38.2.0",
@@ -90,17 +92,19 @@
       ]
     },
     "files": [
-      "**/*"
+      "package.json",
+      "app/**/*",
+      "autopilot/autopilot.exe"
     ],
     "extraResources": [
       {
-        "from": "autopilot",
-        "to": "autopilot",
-        "filter": ["**/*"]
+        "from": "autopilot/autopilot.exe",
+        "to": "autopilot/autopilot.exe"
+      },
+      {
+        "from": "autopilot/autopilot",
+        "to": "autopilot/autopilot"
       }
-    ],
-    "asarUnpack": [
-      "autopilot/**"
     ]
   },
   "dependencies": {

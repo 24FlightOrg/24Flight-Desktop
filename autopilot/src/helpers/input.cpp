@@ -1,4 +1,4 @@
-#include "include/helpers/input.hpp"
+#include "helpers/input.hpp"
 
 static bool isWhitespace(char ch) {
     return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';

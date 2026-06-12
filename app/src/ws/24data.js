@@ -1,8 +1,15 @@
 import WebSocket from 'ws';
 import { Notification } from 'electron';
+import { setCurrentAircraftState } from '../ipc/index.js';
+import { autopilotCallsign } from '../server.js';
 
 let ws;
 let reconnectInterval;
+export let latestWorldState = { d: {}, s: new Date().toISOString() };
+
+export function getCurrentWorldState() {
+    return latestWorldState;
+}
 
 export function sendWS(data) {
     if (ws && ws.readyState === WebSocket.OPEN) {
@@ -73,6 +80,29 @@ export function initWS(mainWindow) {
                     }).show();
                 }
 
+                if (parsed && parsed.type === 'acft' && parsed.payload && typeof parsed.payload === 'object') {
+                    latestWorldState = {
+                        d: parsed.payload,
+                        s: new Date().toISOString(),
+                    };
+
+                    if (autopilotCallsign) {
+                        const acft = parsed.payload;
+                        const tracked = acft[autopilotCallsign];
+                        if (tracked) {
+                            setCurrentAircraftState({
+                                x: tracked.position.x || 0,
+                                y: tracked.position.y || 0,
+                                altitude: tracked.altitude || 0,
+                                heading: tracked.heading || 0,
+                                speed: tracked.speed || 0,
+                            });
+                        } else {
+                            setCurrentAircraftState(null);
+                        }
+                    }
+                }
+
                 if (mainWindow && !mainWindow.isDestroyed()) {
                     mainWindow.webContents.send('main-ws-message', str);
                 }
@@ -93,3 +123,5 @@ function startReconnect(mainWindow) {
         initWS(mainWindow);
     }, 5000);
 }
+
+export { autopilotCallsign };

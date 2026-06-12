@@ -1,0 +1,10 @@
+^C:\USERS\DEV\DOCUMENTS\24FLIGHT\24FLIGHTSYSTEM\AUTOPILOT\BUILD\CMAKEFILES\077A8FE26458D5198E2DA13727CA2D87\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/dev/Documents/24Flight/24FlightSystem/autopilot -BC:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/Autopilot.slnx
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

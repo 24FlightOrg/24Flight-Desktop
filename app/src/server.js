@@ -3,17 +3,20 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import express from "express";
-import { initWS, sendWS, getWSStatus } from './ws/24data.js';
+import { initWS, sendWS, getWSStatus, latestWorldState } from './ws/24data.js';
 import discordrpcimport from './ipc/discord.cjs'
+import { initAutopilot, startAutopilotPayload, updateAutopilotPayload, getAutopilotStatus, stopAutopilotPayload, setCurrentWaypoints, setCurrentAircraftState } from './ipc/index.js'
 const { setupRPC, getStartTimestamp, setStartTimestamp } = discordrpcimport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-let win;
+let win = null;
 let user_session_token;
 const aircraftWindows = new Map();
 let rpc = setupRPC();
+
+export default win;
 
 const server = express();
 const SERVER_PORT = 24000;
@@ -85,6 +88,8 @@ app.whenReady().then(async () => {
   let isLoggedIn = false;
   const storedToken = getStoredToken();
 
+  await initAutopilot();
+
   if (storedToken) {
     console.log('found token, validating...');
     const isValid = await validateToken(storedToken);
@@ -122,12 +127,14 @@ app.whenReady().then(async () => {
     icon: path.join(process.cwd(), 'build/icons/png/1024x1024.png'),
     frame: false,
     webPreferences: {
-      devTools: false,
+      devTools: true,
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     }
   });
+
+  win.webContents.openDevTools()
 
   win.setTitle('');
   win.on('closed', () => {
@@ -187,7 +194,7 @@ ipcMain.handle('open-login', async () => {
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
-        devTools: false
+        devTools: true
       }
     });
 
@@ -321,14 +328,92 @@ ipcMain.handle('get-login', () => {
   return isLoggedIn;
 });
 
-ipcMain.on('autopilot-route', (event, route) => {
+// NEW: Keep track of the interval so we can turn it off
+let telemetryInterval = null; 
+
+export let autopilotCallsign = null;
+
+async function firstStateSet(callsign) {
+  const acft = latestWorldState.d;
+
+  const targetAircraft = acft[callsign];
+
+  if (targetAircraft) {
+    setCurrentAircraftState({
+      x: targetAircraft.position.x || 0,
+      y: targetAircraft.position.y || 0,
+      altitude: targetAircraft.altitude || 0,
+      heading: targetAircraft.heading || 0,
+      speed: targetAircraft.speed || 0,
+    });
+    
+    autopilotCallsign = callsign;
+    return true;
+  }
+
+  console.log(`[State Set] Could not find aircraft with callsign: ${callsign}`);
+  return false; 
+}
+
+ipcMain.on('autopilot-route', async (event, route) => {
   try {
     console.log('Autopilot route received from renderer:', route);
+    
     if (route && route.action === 'engage') {
       console.log('autopilot engaged');
-      if (route.route) console.log('Route details:', route.route);
+      
+      if (route.route) {
+        console.log('Route details:', route.route);
+        const callsign = route.route.callsign || route.route.aircraft || '';
+        const waypoints = Array.isArray(route.route.waypoints) ? route.route.waypoints.map((wp) => {
+          if (typeof wp === 'object' && wp !== null) {
+            return {
+              x: Number(wp.x) || 0,
+              y: Number(wp.y) || 0,
+              altitude: Number(wp.altitude) || 0
+            };
+          }
+          return wp;
+        }) : [];
+
+        try {
+          // 1. SET GLOBAL WAYPOINTS (Crucial for the updater to work)
+          setCurrentWaypoints(waypoints);
+
+          await firstStateSet(callsign);
+
+          // 2. START C++ PROCESS
+          const result = await startAutopilotPayload(waypoints, callsign);
+
+          // 3. START TELEMETRY LOOP
+          // Clear any existing ghost loop just in case
+          if (telemetryInterval) clearInterval(telemetryInterval);
+          
+          // Send data to C++ 10 times a second (100ms)
+          telemetryInterval = setInterval(async () => {
+            await updateAutopilotPayload();
+          }, 100);
+
+          event.sender.send('autopilot-ack', { status: 'started', action: 'engage', result, timestamp: Date.now() });
+          return;
+        } catch (startError) {
+          console.error('Autopilot start failed:', startError);
+          event.sender.send('autopilot-ack', { status: 'error', action: 'engage', error: String(startError), timestamp: Date.now() });
+          return;
+        }
+      }
     } else if (route && route.action === 'disengage') {
       console.log('autopilot disengaged');
+      
+      // 1. STOP TELEMETRY LOOP
+      if (telemetryInterval) {
+        clearInterval(telemetryInterval);
+        telemetryInterval = null;
+      }
+
+      // 2. KILL C++ PROCESS
+      await stopAutopilotPayload();
+      
     } else {
       console.log('autopilot action unknown:', route && route.action);
     }
@@ -336,6 +421,7 @@ ipcMain.on('autopilot-route', (event, route) => {
     event.sender.send('autopilot-ack', { status: 'received', action: route && route.action, timestamp: Date.now() });
   } catch (err) {
     console.error('Error handling autopilot-route:', err);
+    event.sender.send('autopilot-ack', { status: 'error', error: String(err), timestamp: Date.now() });
   }
 });
 
