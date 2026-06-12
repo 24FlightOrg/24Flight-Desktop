@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const DiscordRPC = require('discord-rpc-electron');
 
 let startTimestamp;
@@ -34,8 +36,39 @@ async function setupRPC() {
         rpcClient = null;
     });
 
+    const originalXdgRuntime = process.env.XDG_RUNTIME_DIR;
+
+    if (process.platform === 'linux' && originalXdgRuntime) {
+        let rpcPath = path.join(originalXdgRuntime, 'app/com.discordapp.Discord');
+
+        if (!fs.existsSync(path.join(rpcPath, 'discord-ipc-0'))) {
+            const appDir = path.join(originalXdgRuntime, 'app');
+            if (fs.existsSync(appDir)) {
+                try {
+                    const apps = fs.readdirSync(appDir);
+                    for (const app of apps) {
+                        if (fs.existsSync(path.join(appDir, app, 'discord-ipc-0'))) {
+                            rpcPath = path.join(appDir, app);
+                            break;
+                        }
+                    }
+                } catch (e) {}
+            }
+        }
+
+        if (fs.existsSync(path.join(rpcPath, 'discord-ipc-0'))) {
+            process.env.XDG_RUNTIME_DIR = rpcPath;
+        }
+    }
+
+    const loginPromise = rpc.login({ clientId });
+
+    if (originalXdgRuntime) {
+        process.env.XDG_RUNTIME_DIR = originalXdgRuntime;
+    }
+
     try {
-        await rpc.login({ clientId });
+        await loginPromise;
         rpcClient = rpc;
         console.log('Discord RPC initialized');
     } catch (err) {
