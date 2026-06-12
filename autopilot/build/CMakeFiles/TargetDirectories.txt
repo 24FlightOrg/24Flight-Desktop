@@ -1,3 +1,0 @@
-/home/trist/Documents/GitHub/24FlightSystem/autopilot/build/CMakeFiles/autopilot.dir
-/home/trist/Documents/GitHub/24FlightSystem/autopilot/build/CMakeFiles/edit_cache.dir
-/home/trist/Documents/GitHub/24FlightSystem/autopilot/build/CMakeFiles/rebuild_cache.dir

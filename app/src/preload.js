@@ -47,3 +47,7 @@ contextBridge.exposeInMainWorld('24data', {
 contextBridge.exposeInMainWorld('discordRPC', {
   updateActivity: (state) => ipcRenderer.invoke('update-discord-activity', state),
 });
+
+contextBridge.exposeInMainWorld('notificationService', {
+  notify: (title, body) => ipcRenderer.invoke('show-notification', { title, body }),
+});
