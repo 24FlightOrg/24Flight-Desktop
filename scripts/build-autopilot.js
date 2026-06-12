@@ -50,6 +50,26 @@ async function buildAutopilot() {
     await removeBuildDir();
     await spawnProcess('cmake', getCMakeConfigureArgs());
     await spawnProcess('cmake', getCMakeBuildArgs());
+
+    if (process.platform === 'linux') {
+        const sourcePath = path.join(AUTOPILOT_DIR, 'autopilot');
+        const destPath = path.join(AUTOPILOT_DIR, 'autopilot.exe');
+        
+        try {
+            await fs.rename(sourcePath, destPath);
+            console.log(`Successfully renamed binary to: autopilot.exe`);
+        } catch (err) {
+            // Fallback: If your CMakeLists.txt outputs to the build dir instead
+            const buildSourcePath = path.join(BUILD_DIR, 'autopilot');
+            const buildDestPath = path.join(BUILD_DIR, 'autopilot.exe');
+            try {
+                await fs.rename(buildSourcePath, buildDestPath);
+                console.log(`Successfully renamed binary in build dir to: autopilot.exe`);
+            } catch (fallbackErr) {
+                console.warn(`Warning: Could not find the compiled 'autopilot' binary to rename it.`);
+            }
+        }
+    }
 }
 
 async function main() {
