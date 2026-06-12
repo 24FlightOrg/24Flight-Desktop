@@ -26,7 +26,8 @@ contextBridge.exposeInMainWorld('windowControl', {
 contextBridge.exposeInMainWorld('autopilot', {
   sendRoute: (route) => ipcRenderer.send('autopilot-route', route),
   onAck: (cb) => ipcRenderer.on('autopilot-ack', (_, data) => cb(data)),
-  onYokeUpdate: (cb) => ipcRenderer.on('autopilot-yoke-update', (_, data) => cb(data))
+  onYokeUpdate: (cb) => ipcRenderer.on('autopilot-yoke-update', (_, data) => cb(data)),
+  stop: () => ipcRenderer.invoke('autopilot-stop'),
 });
 
 contextBridge.exposeInMainWorld('mapBridge', {

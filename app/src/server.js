@@ -127,14 +127,12 @@ app.whenReady().then(async () => {
     icon: path.join(process.cwd(), 'build/icons/png/1024x1024.png'),
     frame: false,
     webPreferences: {
-      devTools: true,
+      devTools: false,
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     }
   });
-
-  win.webContents.openDevTools()
 
   win.setTitle('');
   win.on('closed', () => {
@@ -194,7 +192,7 @@ ipcMain.handle('open-login', async () => {
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
-        devTools: true
+        devTools: false
       }
     });
 
@@ -355,6 +353,20 @@ async function firstStateSet(callsign) {
   return false; 
 }
 
+ipcMain.on('autopilot-stop', async (event) => {
+  try {
+    // Stop telemetry loop
+    if (telemetryInterval) {
+      clearInterval(telemetryInterval);
+      telemetryInterval = null;
+    }
+
+    
+  } catch (err) {
+    console.error('Error stopping autopilot:', err);
+  }
+});
+
 ipcMain.on('autopilot-route', async (event, route) => {
   try {
     console.log('Autopilot route received from renderer:', route);
@@ -442,7 +454,7 @@ ipcMain.handle('open-aircraft-window', (event, callsign) => {
       frame: false,
       resizable: true,
       webPreferences: {
-        devTools: true,
+        devTools: false,
         nodeIntegration: false,
         contextIsolation: true,
         preload: path.join(__dirname, 'preload.js')

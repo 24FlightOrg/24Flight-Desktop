@@ -3,6 +3,7 @@ import path from 'path';
 import process from 'process';
 import { app } from 'electron';
 import win from '../server.js';
+import { autopilotCallsign } from '../server.js';
 
 // Autopilot process reference
 let autopilotProcess = null;
@@ -223,6 +224,7 @@ export const stopAutopilotPayload = async () => {
         autopilotProcess.kill();
         autopilotProcess = null;
         latestAutopilotStatus = 'DISENGAGED';
+        autopilotCallsign = null;
         return true;
     }
     return false;

@@ -123,5 +123,3 @@ function startReconnect(mainWindow) {
         initWS(mainWindow);
     }, 5000);
 }
-
-export { autopilotCallsign };

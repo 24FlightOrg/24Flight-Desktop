@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"/home/trist/Documents/GitHub/24FlightSystem/autopilot/build/cmake_install.cmake"
+		"C:/Users/dev/Documents/24Flight/24FlightSystem/autopilot/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }
