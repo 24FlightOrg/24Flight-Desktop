@@ -155,14 +155,23 @@ function setupProcessListeners() {
                     }
                 }
             }
+
+            if (cleanLine.includes('DOWN')) {
+                const match = cleanLine.match(/(\w+) DOWN/);
+                if (match) {
+                    console.log(`[Key Press Detected] ${match[1]} pressed from JAVA stream`);
+                }
+            } else if (cleanLine.includes('UP')) {
+                const match = cleanLine.match(/(\w+) UP/);
+                if (match) {
+                    console.log(`[Key Release Detected] ${match[1]} released from JAVA stream`);
+                }
+            }
         }
     };
 
-    // Listen to Standard Output (stdout)
     autopilotProcess.stdout.on('data', parseTelemetryData);
 
-    // CRITICAL FIX: Run the exact same parsing logic on Standard Error (stderr) 
-    // because that's where your C++ engine is routing the logs!
     autopilotProcess.stderr.on('data', parseTelemetryData);
 }
 
@@ -281,7 +290,19 @@ setInterval(() => {
     } else {
         releaseAllKeys();
     }
-}, 50);
+}, 500);
+
+setInterval(() => {
+    if (autopilotEngaged) {
+        const key = activeKey;
+
+        releaseAllKeys();
+
+        if (key) {
+            pressKey(key);
+        }
+    }
+})
 
 export default {
     initJavaWorker,

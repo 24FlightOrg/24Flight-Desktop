@@ -11,7 +11,6 @@ public class InputWorker {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             String line;
 
-            // Signal to Node that the streamlined pipeline is active
             System.out.println("WORKER_READY");
 
             while ((line = reader.readLine()) != null) {
@@ -24,7 +23,7 @@ public class InputWorker {
 
                 switch (line) {
                     case "PRESS_A":
-                        robot.keyPress(65); // Physical 'A'
+                        robot.keyPress(65);
                         System.out.println("A DOWN");
                         break;
                     case "RELEASE_A":
@@ -32,7 +31,7 @@ public class InputWorker {
                         System.out.println("A UP");
                         break;
                     case "PRESS_D":
-                        robot.keyPress(68); // Physical 'D'
+                        robot.keyPress(68);
                         System.out.println("D DOWN");
                         break;
                     case "RELEASE_D":
