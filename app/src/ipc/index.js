@@ -5,7 +5,6 @@ import fs from 'fs';
 import { app } from 'electron';
 import win from '../server.js';
 
-// --- SYSTEM STATE VARIABLES ---
 let autopilotProcess = null;
 let javaWorkerProcess = null;
 
@@ -17,13 +16,9 @@ let activeKey = null;
 let currentAircraftState = null;
 let currentWaypoints = [];
 
-/**
- * Initializes the clean Java Input Bridge Process
- */
 export const initJavaWorker = () => {
     if (javaWorkerProcess && !javaWorkerProcess.killed) return true;
 
-    // Target the apinputworker directory where the JAR is generated
     let jarPath = app.isPackaged
         ? path.join(process.resourcesPath, 'apinputworker', 'InputWorker.jar')
         : path.join(process.cwd(), 'apinputworker', 'InputWorker.jar');
@@ -32,7 +27,6 @@ export const initJavaWorker = () => {
     
     javaWorkerProcess = spawn('java', ['-jar', jarPath]);
 
-    // Route standard out strings from Java right into the main Electron terminal console
     javaWorkerProcess.stdout.on('data', (data) => {
         console.log(`[Java STDOUT] ${data.toString().trim()}`);
     });
@@ -47,9 +41,6 @@ export const initJavaWorker = () => {
     });
 };
 
-/**
- * Streams text buffers down to Java's System.in stream
- */
 function sendJavaCommand(command) {
     if (!javaWorkerProcess || javaWorkerProcess.stdin.destroyed) {
         initJavaWorker();
@@ -80,9 +71,6 @@ function releaseAllKeys() {
     }
 }
 
-/**
- * Initialize the C++ autopilot math calculation process
- */
 export const initAutopilot = async () => {
     if (autopilotProcess && !autopilotProcess.killed) {
         console.log('[Autopilot] Math engine already running');
@@ -101,7 +89,6 @@ export const initAutopilot = async () => {
             throw new Error(`Autopilot binary not found at: ${binaryPath}`);
         }
 
-        // Spin up the Java input bridge worker alongside the math engine
         initJavaWorker();
 
         autopilotProcess = spawn(binaryPath);
@@ -114,13 +101,9 @@ export const initAutopilot = async () => {
     }
 };
 
-/**
- * Registers live data streams from the active C++ binary process
- */
 function setupProcessListeners() {
     if (!autopilotProcess) return;
 
-    // Helper function to extract telemetry data from a text chunk
     const parseTelemetryData = (rawBuffer) => {
         const rawChunk = rawBuffer.toString();
         const lines = rawChunk.split(/\r?\n/);
@@ -129,10 +112,8 @@ function setupProcessListeners() {
             const cleanLine = line.trim();
             if (!cleanLine) continue;
 
-            // Log everything to the terminal so you can see it working
             console.log(`[C++ Stream Intercept] ${cleanLine}`);
 
-            // TARGET LOCKED: Check for Yoke Cmd anywhere in the string
             if (cleanLine.includes('Yoke Cmd:')) {
                 const parts = cleanLine.split('Yoke Cmd:');
                 if (parts.length > 1) {
@@ -252,7 +233,6 @@ export const stopAutopilotPayload = async () => {
     autopilotEngaged = false;
     currentYokePercentage = 0.0;
     
-    // Reset inputs immediately
     sendJavaCommand("RELEASE_ALL");
     sendJavaCommand("EXIT");
 
@@ -277,7 +257,6 @@ export const getAutopilotState = () => {
     };
 };
 
-// --- MAIN HARDWARE DRIVER LOOP (20Hz Refresh) ---
 setInterval(() => {
     console.log(`[Loop Tick] Engaged: ${autopilotEngaged} | Yoke Cmd: ${currentYokePercentage}% | Active Key: ${activeKey}`);
 
