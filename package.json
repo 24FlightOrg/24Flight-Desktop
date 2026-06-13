@@ -97,7 +97,8 @@
       "package.json",
       "app/**/*",
       "autopilot/autopilot.exe",
-      "apinputworker/InputWorker.jar"
+      "apinputworker/InputWorker.jar",
+      "install-deps/**/*"
     ],
     "extraResources": [
       {
@@ -111,6 +112,10 @@
       {
         "from": "apinputworker/InputWorker.jar",
         "to": "apinputworker/InputWorker.jar"
+      },
+      {
+        "from": "install-deps/",
+        "to": "install-deps/"
       }
     ]
   },
