@@ -25,7 +25,7 @@ export const initJavaWorker = () => {
 
     // Target the apinputworker directory where the JAR is generated
     let jarPath = app.isPackaged
-        ? path.join(process.resourcesPath(), 'apinputworker', 'InputWorker.jar')
+        ? path.join(process.resourcesPath, 'apinputworker', 'InputWorker.jar')
         : path.join(process.cwd(), 'apinputworker', 'InputWorker.jar');
 
     console.log(`[Electron] Spawning pure Java Robot from: ${jarPath}`);
@@ -93,7 +93,7 @@ export const initAutopilot = async () => {
     const binaryExt = platform === 'win32' ? '.exe' : '';
     
     let binaryPath = app.isPackaged
-        ? path.join(process.resourcesPath(), 'autopilot', `autopilot${binaryExt}`)
+        ? path.join(process.resourcesPath, 'autopilot', `autopilot${binaryExt}`)
         : path.join(process.cwd(), 'autopilot', `autopilot${binaryExt}`);
 
     try {
