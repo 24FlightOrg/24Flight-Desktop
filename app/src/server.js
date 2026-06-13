@@ -14,6 +14,15 @@ let win;
 let user_session_token;
 const aircraftWindows = new Map();
 let rpc = setupRPC();
+let robotjs;
+
+async function getRobotJS() {
+  if (!robotjs) {
+    const mod = await import('robotjs');
+    robotjs = mod.default || mod;
+  }
+  return robotjs;
+}
 
 const server = express();
 const SERVER_PORT = 24000;
@@ -319,6 +328,39 @@ ipcMain.handle('logout', async () => {
 
 ipcMain.handle('get-login', () => {
   return isLoggedIn;
+});
+
+ipcMain.handle('mouse-move', async (event, x, y) => {
+  try {
+    const robot = await getRobotJS();
+    robot.moveMouse(Number(x), Number(y));
+    return { success: true };
+  } catch (err) {
+    console.error('mouse-move error:', err);
+    return { success: false, error: err.message };
+  }
+});
+
+ipcMain.handle('mouse-click', async (event, button = 'left') => {
+  try {
+    const robot = await getRobotJS();
+    robot.mouseClick(String(button));
+    return { success: true };
+  } catch (err) {
+    console.error('mouse-click error:', err);
+    return { success: false, error: err.message };
+  }
+});
+
+ipcMain.handle('mouse-scroll', async (event, x = 0, y = 0) => {
+  try {
+    const robot = await getRobotJS();
+    robot.scrollMouse(Number(x), Number(y));
+    return { success: true };
+  } catch (err) {
+    console.error('mouse-scroll error:', err);
+    return { success: false, error: err.message };
+  }
 });
 
 ipcMain.on('autopilot-route', (event, route) => {
