@@ -12,74 +12,56 @@
 <body>
     <div class="top-bar" id="top-bar"></div>
 
-    <!-- Main homepage wrapper -->
     <div class="page-wrap">
-        <main class="home-grid">
-            <!-- Hero section: edit title, description, or buttons here -->
-            <section class="hero-panel">
-                <div class="hero-copy">
-                    <p class="eyebrow">Flight Operations</p>
-                    <h1>Command the cockpit with calm, modern control.</h1>
-                    <p class="hero-text">A clean homepage to launch mission-critical panels, review system health, and access a blank settings placeholder.</p>
+        <main class="dashboard-container">
+            <section class="dashboard-left">
+                <div class="greeting-section">
+                    <h1>Welcome back, <span id="username-display">Unknown</span>.</h1>
+                    <p class="subtitle">Open part of our app to get started!</p>
                 </div>
-                <div class="hero-actions">
-                    <a class="primary-button" href="areas/map.html">Open Map</a>
-                    <a class="secondary-link" href="settings.html">Settings</a>
+
+                <div class="tiles-grid">
+                    <a class="tile" id="btn-map" href="areas/map.html">
+                        <span class="tile-icon">🗺️</span>
+                        <span class="tile-label">Live Map</span>
+                    </a>
+                    <a class="tile" id="btn-autopilot" href="areas/autopilot.html">
+                        <span class="tile-icon">✈️</span>
+                        <span class="tile-label">Autopilot</span>
+                    </a>
+                    <a class="tile" id="btn-tcas" href="areas/tcas.html">
+                        <span class="tile-icon">📡</span>
+                        <span class="tile-label">TCAS</span>
+                    </a>
+                    <a class="tile" id="btn-overlay" href="areas/overlay.html">
+                        <span class="tile-icon">🎮</span>
+                        <span class="tile-label">Overlay</span>
+                    </a>
                 </div>
             </section>
 
-            <!-- Cards panel: update each item label and link as needed -->
-            <section class="card-panel">
-                <div class="card-grid">
-                    <a class="card" href="areas/map.html">
-                        <span class="card-title">Live Map</span>
-                        <span class="card-copy">Track routes, weather, and airspace activity at a glance.</span>
-                    </a>
-                    <a class="card" href="areas/autopilot.html">
-                        <span class="card-title">Autopilot</span>
-                        <span class="card-copy">Review autopilot controls and connection status in real time.</span>
-                    </a>
-                    <a class="card" href="areas/tcas.html">
-                        <span class="card-title">TCAS</span>
-                        <span class="card-copy">Manage traffic alerts and collision awareness.</span>
-                    </a>
-                    <a class="card" href="areas/overlay.html">
-                        <span class="card-title">Overlay</span>
-                        <span class="card-copy">Open the overlay feed for situational visuals.</span>
-                    </a>
-                    <a class="card card-muted" href="settings.html">
-                        <span class="card-title">Settings</span>
-                        <span class="card-copy">Placeholder page. No settings are configured yet.</span>
-                    </a>
+            <section class="dashboard-right">
+                <div class="info-card">
+                    <h2>System Status</h2>
+                    <div class="status-item">
+                        <span class="status-label">Server Connection</span>
+                        <span class="status-value" data-type="connection">Connecting...</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Data Stream</span>
+                        <span class="status-value" data-type="datastream">Inactive</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Version</span>
+                        <span class="status-value" data-type="version">--</span>
+                    </div>
                 </div>
 
-                <!-- Status summary: each value can be updated by JavaScript using data-type attributes -->
-                <div class="status-summary">
-                    <div class="status-card">
-                        <h2>System status</h2>
-                        <div class="status-row">
-                            <span>Server</span>
-                            <strong data-type="connection">Connecting...</strong>
-                        </div>
-                        <div class="status-row">
-                            <span>Data stream</span>
-                            <strong data-type="datastream">Inactive</strong>
-                        </div>
-                        <div class="status-row">
-                            <span>Version</span>
-                            <strong data-type="version">--</strong>
-                        </div>
-                    </div>
-                    <div class="status-card">
-                        <h2>Quick overview</h2>
-                        <div class="status-row">
-                            <span>Active flights</span>
-                            <strong data-type="flights">--</strong>
-                        </div>
-                        <div class="status-row">
-                            <span>Ready status</span>
-                            <strong class="active">Awaiting launch</strong>
-                        </div>
+                <div class="info-card">
+                    <h2>Quick Stats</h2>
+                    <div class="status-item">
+                        <span class="status-label">Active Flights</span>
+                        <span class="status-value" data-type="flights">--</span>
                     </div>
                 </div>
             </section>
@@ -92,6 +74,7 @@
         };
     </script>
     <script src="/topbar/topbar.js"></script>
+
     <script src="js/index.js"></script>
 </body>
 
