@@ -77,3 +77,9 @@ CLAUDE.md
 dist/*
 
 autopilot/build/
+autopilot/autopilot.exe
+autopilot/autopilot
+
+apinputworker/bin
+apinputworker/InputWorker.jar
+apinputworker/manifest.txt
