@@ -328,7 +328,6 @@ ipcMain.handle('get-login', () => {
   return isLoggedIn;
 });
 
-// NEW: Keep track of the interval so we can turn it off
 let telemetryInterval = null; 
 
 export let autopilotCallsign = null;
@@ -357,7 +356,6 @@ async function firstStateSet(callsign) {
 
 ipcMain.on('autopilot-stop', async (event) => {
   try {
-    // Stop telemetry loop
     if (telemetryInterval) {
       clearInterval(telemetryInterval);
       telemetryInterval = null;
