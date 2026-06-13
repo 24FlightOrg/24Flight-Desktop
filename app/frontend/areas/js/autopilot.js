@@ -316,3 +316,8 @@
     }
 })();
 
+const stopapBtn = document.getElementById('stop-autopilot');
+
+stopapBtn.addEventListener('click', () => {
+    window.autopilot.stop();
+});

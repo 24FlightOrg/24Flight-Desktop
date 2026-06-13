@@ -33,14 +33,16 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build:externals": "npm run build:autopilot && npm run build:apinputworker",
     "build:autopilot": "node scripts/build-autopilot.js",
+    "build:apinputworker": "node scripts/build-apinputworker.js",
     "build:win-e:autopilot": "powershell -NoProfile -Command \"if (Test-Path 'autopilot/build') { Remove-Item 'autopilot/build' -Recurse -Force -ErrorAction SilentlyContinue }\" && cmake -S autopilot -B autopilot/build -G \"Visual Studio 18 2026\" -A x64 && cmake --build autopilot/build --config Release",
-    "start": "npm run build:autopilot && npx electron .",
-    "build": "npm run build:autopilot && npx electron-builder --win --mac",
-    "build:all": "npm run build:autopilot && npx electron-builder --win --mac --linux",
-    "build:linux": "npm run build:autopilot && npx electron-builder --linux",
-    "build:mac": "npm run build:autopilot && npx electron-builder --mac",
-    "build:win": "npm run build:autopilot && npx electron-builder --win"
+    "start": "npm run build:externals && npx electron .",
+    "build": "npm run build:externals && npx electron-builder --win --mac",
+    "build:all": "npm run build:externals && npx electron-builder --win --mac --linux",
+    "build:linux": "npm run build:externals && npx electron-builder --linux",
+    "build:mac": "npm run build:externals && npx electron-builder --mac",
+    "build:win": "npm run build:externals && npx electron-builder --win"
   },
   "devDependencies": {
     "electron": "^38.2.0",
@@ -94,7 +96,8 @@
     "files": [
       "package.json",
       "app/**/*",
-      "autopilot/autopilot.exe"
+      "autopilot/autopilot.exe",
+      "apinputworker/InputWorker.jar"
     ],
     "extraResources": [
       {
@@ -104,12 +107,18 @@
       {
         "from": "autopilot/autopilot",
         "to": "autopilot/autopilot"
+      },
+      {
+        "from": "apinputworker/InputWorker.jar",
+        "to": "apinputworker/InputWorker.jar"
       }
     ]
   },
   "dependencies": {
     "discord-rpc-electron": "^4.0.2",
     "express": "^5.2.1",
+    "koffi": "^3.0.2",
+    "sudo-prompt": "^9.2.1",
     "ws": "^8.19.0"
   }
 }

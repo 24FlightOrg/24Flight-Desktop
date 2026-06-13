@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, ipcMain, safeStorage } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain, safeStorage, globalShortcut } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
@@ -88,8 +88,6 @@ app.whenReady().then(async () => {
   let isLoggedIn = false;
   const storedToken = getStoredToken();
 
-  await initAutopilot();
-
   if (storedToken) {
     console.log('found token, validating...');
     const isValid = await validateToken(storedToken);
@@ -106,6 +104,10 @@ app.whenReady().then(async () => {
     console.log('no stored token found');
     isLoggedIn = false;
   }
+
+  globalShortcut.register('CommandOrControl+Shift+Alt+K', () => {
+    stopAutopilotPayload();
+  });
 
   let windowHeight = 600;
   let windowWidth = 800;
@@ -511,4 +513,8 @@ ipcMain.handle('get-ws-status', () => {
 
 ipcMain.handle('update-discord-activity', (event, state) => {
   updateActivity(state);
+});
+
+ipcMain.handle('autopilot-stop', () => {
+  stopAutopilotPayload();
 });
