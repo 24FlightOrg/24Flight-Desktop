@@ -10,7 +10,6 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-// --- COORDINATE TRANSFORM CONSTANTS ---
 const float IMAGE_WIDTH = 14453.0f;
 const float IMAGE_HEIGHT = 13800.0f;
 
@@ -46,7 +45,6 @@ struct AircraftState {
     float x, y, heading, altitude, speed;
 };
 
-// --- THE REVERSE TRANSFORMER ---
 Waypoint transformMapToApi(float mapX, float mapY) {
     float dx = (mapX - (IMAGE_WIDTH / 2.0f)) / SCALE;
     float apiX = dx + PTFS_CENTER_X;
@@ -76,24 +74,19 @@ float extractFloatValue(const std::string& json, const std::string& key) {
     return 0.0f;
 }
 
-// Calculate target bearing using Pure Trigonometry
 float calculateBearing(float startX, float startY, float targetX, float targetY) {
-    // Top_Left Y is negative, meaning smaller Y = North.
     float dLat = startY - targetY; 
     float dLon = targetX - startX;
     
-    // Pure atan2 mapping: 0 = North, 90 = East, 180 = South, -90 = West
     float bearingRad = std::atan2(dLon, dLat); 
     float bearingDeg = bearingRad * (180.0f / M_PI);
     
-    // Normalize safely to 0-360 standard compass
     while (bearingDeg < 0.0f) bearingDeg += 360.0f;
     while (bearingDeg >= 360.0f) bearingDeg -= 360.0f;
     
     return bearingDeg;
 }
 
-// Calculates the shortest turn direction (-180 to +180)
 float getSignedHeadingDiff(float current, float target) {
     float diff = target - current;
     while (diff > 180.0f) diff -= 360.0f;
@@ -101,34 +94,26 @@ float getSignedHeadingDiff(float current, float target) {
     return diff;
 }
 
-// Direct proportional rudder logic
 float calculateYokePercent(float currentHeading, float targetBearing) {
     float signedDiff = getSignedHeadingDiff(currentHeading, targetBearing);
     
-    // If we are off by 90 degrees, pull 100% yoke. If off by 45 degrees, pull 50% yoke.
     float percent = (signedDiff / 90.0f) * 100.0f;
     
     return std::clamp(percent, -100.0f, 100.0f);
 }
 
-// Hitbox Check in Native API Units
 bool isWithinHitbox(const AircraftState& acft, const Waypoint& target) {
-    // Exactly matches the Python logic: 500 / SCALE (approx 3333 API units)
     float hitboxRadiusAPI = 500.0f / SCALE; 
     return std::abs(acft.x - target.x) <= hitboxRadiusAPI && 
            std::abs(acft.y - target.y) <= hitboxRadiusAPI;
 }
 
-// Parse and instantly transform waypoints
 std::vector<Waypoint> parseWaypoints(const std::string& json) {
     std::vector<Waypoint> waypoints;
     
-    // CRITICAL: We must skip the aircraft's own X/Y at the start of the string,
-    // otherwise the regex turns your plane into Waypoint 0 and breaks the math!
     size_t wpStart = json.find("\"waypoints\"");
     if (wpStart == std::string::npos) return waypoints;
     
-    // Only let the regex search the text *after* the waypoints array starts
     std::string searchStr = json.substr(wpStart); 
     std::smatch match;
     
@@ -138,7 +123,6 @@ std::vector<Waypoint> parseWaypoints(const std::string& json) {
         float mapX = std::stof(match[1].str());
         float mapY = std::stof(match[2].str());
         
-        // TRANSFORM AS WE LOAD
         waypoints.push_back(transformMapToApi(mapX, mapY));
         searchStr = match.suffix().str(); 
     }
@@ -234,7 +218,6 @@ void processAutopilot(const std::string& inputJson) {
         }
     }
     
-    // Proportional Steering Logic execution
     const Waypoint& activeTarget = waypoints[gMissionState.waypointIndex];
     float targetBearing = calculateBearing(acft.x, acft.y, activeTarget.x, activeTarget.y);
     float actualYokePercent = calculateYokePercent(acft.heading, targetBearing);
