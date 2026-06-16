@@ -7,7 +7,7 @@
 #include <algorithm>
 
 #ifndef M_PI
-#define M_PI 3.14159265358979323846
+#define M_PI 3.141592653589793238462643383279502884
 #endif
 
 const float IMAGE_WIDTH = 14453.0f;
@@ -30,7 +30,6 @@ const float SCALE = std::min(SCALE_X, SCALE_Y);
 
 const float OFFSET_Y = 8.0f;
 
-// Global mission state
 static struct MissionState {
     bool engaged = false;
     bool missionComplete = false;
