@@ -78,7 +78,7 @@ export const initAutopilot = async () => {
     }
 
     const platform = process.platform;
-    const binaryExt = platform === 'win32' ? '.exe' : '';
+    const binaryExt = '.exe';
     
     let binaryPath = app.isPackaged
         ? path.join(process.resourcesPath, 'autopilot', `autopilot${binaryExt}`)
