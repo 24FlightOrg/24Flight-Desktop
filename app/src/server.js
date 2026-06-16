@@ -404,7 +404,7 @@ ipcMain.on('autopilot-route', async (event, route) => {
           // Send data to C++ 10 times a second (100ms)
           telemetryInterval = setInterval(async () => {
             await updateAutopilotPayload();
-          }, 100);
+          }, 500);
 
           event.sender.send('autopilot-ack', { status: 'started', action: 'engage', result, timestamp: Date.now() });
           return;
