@@ -76,13 +76,10 @@ export const initAutopilot = async () => {
         console.log('[Autopilot] Math engine already running');
         return true;
     }
-
-    const platform = process.platform;
-    const binaryExt = '.exe';
     
     let binaryPath = app.isPackaged
-        ? path.join(process.resourcesPath, 'autopilot', `autopilot${binaryExt}`)
-        : path.join(process.cwd(), 'autopilot', `autopilot${binaryExt}`);
+        ? path.join(process.resourcesPath, 'autopilot', `autopilot.exe`)
+        : path.join(process.cwd(), 'autopilot', `autopilot.exe`);
 
     try {
         if (!fs.existsSync(binaryPath)) {
