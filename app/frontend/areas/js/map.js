@@ -1,19 +1,39 @@
-const imageWidth = 14453;
-const imageHeight = 13800;
+const mapMinZoom = 0;
+const mapMaxZoom = 8;
+
+const imageWidth = 14453 * mapMaxZoom;
+const imageHeight = 13800 * mapMaxZoom;
 
 const imageBounds = [
   [0, 0],
   [imageHeight, imageWidth]
 ];
 
-const mapMinZoom = 0;
-const mapMaxZoom = 5;
-
 const mapMaxResolution = 2.0;
 const mapMinResolution = Math.pow(2, mapMaxZoom) * mapMaxResolution;
 
 const mapExtent = [0, imageHeight, imageWidth, 0];
 const tileExtent = [0, imageHeight, imageWidth, 0];
+
+const ptfsBounds = {
+  top_left: { x: -49222.1, y: -45890.8 },
+  bottom_right: { x: 47132.9, y: 46139.2 }
+};
+
+const ptfsCenter = {
+  x: (ptfsBounds.top_left.x + ptfsBounds.bottom_right.x) / 2,
+  y: (ptfsBounds.top_left.y + ptfsBounds.bottom_right.y) / 2
+};
+
+const ptfsWidth = ptfsBounds.bottom_right.x - ptfsBounds.top_left.x;
+const ptfsHeight = ptfsBounds.bottom_right.y - ptfsBounds.top_left.y;
+
+const scaleX = imageWidth / ptfsWidth;
+const scaleY = imageHeight / ptfsHeight;
+const scale = Math.min(scaleX, scaleY);
+
+const flightPlans = new Map();
+const eventFlightPlans = new Map();
 
 const crs = L.CRS.Simple;
 
@@ -37,10 +57,10 @@ const map = L.map('map', {
 const tileLayer = L.tileLayer('https://prod.24flight.org/ptfs/regular/{z}/{x}/{y}.png', {
   minZoom: mapMinZoom,
   maxZoom: mapMaxZoom,
+  maxNativeZoom: mapMaxZoom,
   tileSize: L.point(256, 512),
   noWrap: true,
   tms: false,
-  nativeZooms: [1, 2, 3, 4, 5]
 }).addTo(map);
 
 map.fitBounds([
@@ -52,56 +72,6 @@ map.setView(crs.unproject(L.point(imageWidth / 2, imageHeight / 2)), 2);
 
 const airspaceImageBounds = [[0, 0], [imageHeight, imageWidth]];
 
-class NotificationManager {
-  constructor(containerId = 'notification-container') {
-    this.container = document.getElementById(containerId);
-    if (!this.container) {
-      console.error('Notification container not found.');
-    }
-  }
-
-  show(message, duration = 5000) {
-    if (!this.container) return;
-
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-
-    const messageElement = document.createElement('span');
-    messageElement.className = 'notification-message';
-    messageElement.textContent = message;
-
-    const closeButton = document.createElement('button');
-    closeButton.className = 'notification-close';
-    closeButton.innerHTML = '&times;';
-
-    const removeNotification = () => {
-      notification.style.animation = 'fadeOut 0.3s ease-in forwards';
-      notification.addEventListener('animationend', () => {
-        notification.remove();
-      });
-    };
-
-    closeButton.onclick = removeNotification;
-
-    notification.appendChild(messageElement);
-    notification.appendChild(closeButton);
-
-    this.container.appendChild(notification);
-
-    const timeoutId = setTimeout(() => {
-      if (document.body.contains(notification)) {
-        removeNotification();
-      }
-    }, duration);
-
-    notification.addEventListener('mouseenter', () => clearTimeout(timeoutId));
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  this.notifier = new NotificationManager('notification-container');
-});
-
 let selectedAircraftCallsign = null;
 let iconurl = null;
 let iconcss = null;
@@ -110,26 +80,6 @@ let wsRequestId = 0;
 const wsPending = new Map();
 
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
-const ptfsBounds = {
-  top_left: { x: -49222.1, y: -45890.8 },
-  bottom_right: { x: 47132.9, y: 46139.2 }
-};
-
-const flightPlans = new Map();
-const eventFlightPlans = new Map();
-
-const ptfsCenter = {
-  x: (ptfsBounds.top_left.x + ptfsBounds.bottom_right.x) / 2,
-  y: (ptfsBounds.top_left.y + ptfsBounds.bottom_right.y) / 2
-};
-
-const ptfsWidth = ptfsBounds.bottom_right.x - ptfsBounds.top_left.x;
-const ptfsHeight = ptfsBounds.bottom_right.y - ptfsBounds.top_left.y;
-
-const scaleX = imageWidth / ptfsWidth;
-const scaleY = imageHeight / ptfsHeight;
-const scale = Math.min(scaleX, scaleY);
 
 function apiPositionToLatLng(apiX, apiY) {
   const offsetY = 8;
@@ -142,7 +92,7 @@ function apiPositionToLatLng(apiX, apiY) {
 }
 
 function waypointPositionToLatLng(px, py) {
-  return [imageHeight - py, px];
+  return [imageHeight - (py * mapMaxZoom), (px * mapMaxZoom)];
 }
 
 const aircraftMarkers = new Map();
