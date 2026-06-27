@@ -1,0 +1,241 @@
+.ap-container {
+	width: 100%;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 24px;
+	display: grid;
+	grid-template-columns: 360px 1fr;
+	gap: 20px;
+}
+
+.ap-panel,
+.ap-sidebar {
+	background: rgba(6, 9, 18, 0.92);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 16px;
+	padding: 20px;
+	box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+	color: #f5f5f5;
+}
+
+.ap-sidebar h1 {
+	font-size: 1.9rem;
+	margin-bottom: 12px;
+}
+
+.ap-sidebar p {
+	line-height: 1.6;
+	margin-bottom: 16px;
+	color: rgba(255, 255, 255, 0.78);
+}
+
+.ap-field {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 16px;
+}
+
+.ap-field label {
+	font-size: 0.95rem;
+	color: #dde2ff;
+}
+
+.ap-field input,
+.ap-field select,
+.ap-field button,
+.ap-divider button {
+	width: 100%;
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	background: rgba(255, 255, 255, 0.06);
+	color: #fff;
+	padding: 10px 12px;
+	font-size: 0.95rem;
+}
+
+.ap-field input::placeholder,
+.ap-field select {
+	color: rgba(255, 255, 255, 0.65);
+}
+
+.ap-field button {
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.ap-field button:hover {
+	background: rgba(255, 255, 255, 0.12);
+}
+
+.ap-sidebar .waypoint-list {
+	max-height: 260px;
+	overflow: auto;
+	margin-bottom: 16px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 12px;
+	padding: 12px;
+}
+
+.waypoint-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	padding: 10px 12px;
+	background: rgba(255, 255, 255, 0.04);
+	border-radius: 10px;
+}
+
+.waypoint-item span {
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+}
+
+.waypoint-item button {
+	width: auto;
+	min-width: 80px;
+}
+
+.route-status {
+	min-height: 36px;
+	padding: 10px 12px;
+	border-radius: 12px;
+	margin-top: 10px;
+	font-weight: 600;
+}
+
+.route-status.info {
+	background: rgba(34, 100, 210, 0.18);
+	color: #dbe9ff;
+}
+
+.route-status.success {
+	background: rgba(47, 175, 84, 0.18);
+	color: #c9f7d5;
+}
+
+.route-status.error {
+	background: rgba(210, 47, 47, 0.18);
+	color: #ffc9c9;
+}
+
+.yoke-display {
+	margin-top: 16px;
+	padding: 16px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 12px;
+}
+
+.yoke-label {
+	font-size: 0.9rem;
+	color: rgba(255, 255, 255, 0.65);
+	margin-bottom: 8px;
+}
+
+.yoke-bar {
+	width: 100%;
+	height: 40px;
+	background: rgba(255, 255, 255, 0.08);
+	border-radius: 8px;
+	overflow: hidden;
+	position: relative;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.yoke-center {
+	position: absolute;
+	left: 50%;
+	top: 0;
+	bottom: 0;
+	width: 2px;
+	background: rgba(255, 255, 255, 0.3);
+}
+
+.yoke-fill {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	background: linear-gradient(90deg, #ff6b6b 0%, #ffa500 50%, #51cf66 100%);
+	transition: all 0.1s ease;
+}
+
+.yoke-value {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-weight: bold;
+	font-size: 0.9rem;
+	z-index: 1;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+#map {
+	width: 100%;
+	min-height: 620px;
+	border-radius: 16px;
+	overflow: hidden;
+	background: #08101f;
+}
+
+.legend {
+	margin-top: 12px;
+	color: rgba(255, 255, 255, 0.77);
+	font-size: 0.93rem;
+}
+
+.hidden {
+	display: none !important;
+}
+
+#disclaimer-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(4, 4, 10, 0.94);
+	padding: 20px;
+}
+
+#disclaimer-inner {
+	width: 100%;
+	max-width: 900px;
+	background: #08131d;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 18px;
+	padding: 28px;
+	box-shadow: 0 18px 45px rgba(0, 0, 0, 0.48);
+	color: #f6f7fb;
+}
+
+#disclaimer-inner h1 {
+	margin-bottom: 12px;
+	font-size: 2rem;
+}
+
+#disclaimer-inner p {
+	margin-bottom: 14px;
+	line-height: 1.7;
+	color: rgba(255, 255, 255, 0.78);
+}
+
+#disclaimer-inner ul {
+	margin-left: 18px;
+	margin-bottom: 20px;
+	color: rgba(255, 255, 255, 0.78);
+}
+
+#disclaimer-inner button {
+	width: auto;
+	padding: 12px 22px;
+	font-weight: 700;
+}
