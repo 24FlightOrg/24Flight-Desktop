@@ -58,7 +58,7 @@
     "mac": {
       "icon": "build/icons/mac/icon.icns",
       "target": [
-        "dmg"
+        "pkg"
       ],
       "sign": false,
       "hardenedRuntime": false
@@ -74,23 +74,6 @@
       "target": [
         "AppImage",
         "deb"
-      ]
-    },
-    "dmg": {
-      "icon": "build/icons/mac/icon.icns",
-      "iconSize": 128,
-      "contents": [
-        {
-          "x": 130,
-          "y": 220,
-          "type": "file"
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
       ]
     },
     "files": [

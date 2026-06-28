@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Define where electron-builder extracts your install-deps package resource
+DEPS_DIR="/Applications/24Flight.app/Contents/Resources/install-deps/mac"
+
+# Determine the native processor profile
+MAC_ARCH=$(uname -m)
+
+echo "========================================="
+echo "    Initializing 24Flight macOS JRE Setup"
+echo "========================================="
+echo "Detected Native System Architecture: $MAC_ARCH"
+
+if [ "$MAC_ARCH" = "arm64" ]; then
+    echo "[Processing Architecture] -> Apple Silicon (ARM64)..."
+    
+    # Run the native Apple Silicon JDK package installer if you have it
+    if [ -f "$DEPS_DIR/jdk-26_macos-aarch64_bin.pkg" ]; then
+        installer -pkg "$DEPS_DIR/jdk-26_macos-aarch64_bin.pkg" -target /
+        echo "Native Java environment successfully configured."
+    else
+        echo "ARM64 package missing. Attempting x64 fallback via Rosetta..."
+        if [ -f "$DEPS_DIR/jdk-26_macos-x64_bin.pkg" ]; then
+            installer -pkg "$DEPS_DIR/jdk-26_macos-x64_bin.pkg" -target /
+            echo "Fallback Java environment successfully configured."
+        fi
+    fi
+elif [ "$MAC_ARCH" = "x86_64" ]; then
+    echo "[Processing Architecture] -> Intel (x64)..."
+    
+    if [ -f "$DEPS_DIR/jdk-26_macos-x64_bin.pkg" ]; then
+        installer -pkg "$DEPS_DIR/jdk-26_macos-x64_bin.pkg" -target /
+        echo "Intel Java environment successfully configured."
+    else
+        echo "[Error] -> Missing jdk-26_macos-x64_bin.pkg target file."
+    fi
+
+else
+    echo "Unknown architecture architecture ($MAC_ARCH). Skipping JRE runtime hook."
+fi
+
+echo "========================================="
+echo "   macOS Architecture Setup Complete!    "
+echo "========================================="
+exit 0
