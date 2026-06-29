@@ -73,7 +73,30 @@
       "icon": "build/icons/linux/1024x1024.png",
       "target": [
         "AppImage",
-        "deb"
+        "deb",
+        "rpm",
+        "pacman",
+        "apk"
+      ]
+    },
+    "deb": {
+      "depends": [
+        "openjdk-26-jdk"
+      ]
+    },
+    "rpm": {
+      "depends": [
+        "java-latest-openjdk-devel"
+      ]
+    },
+    "pacman": {
+      "depends": [
+        "jdk-openjdk"
+      ]
+    },
+    "apk": {
+      "depends": [
+        "openjdk26"
       ]
     },
     "files": [
