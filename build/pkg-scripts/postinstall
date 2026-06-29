@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# Define where electron-builder extracts your install-deps package resource
 DEPS_DIR="/Applications/24Flight.app/Contents/Resources/install-deps/mac"
 
-# Determine the native processor profile
 MAC_ARCH=$(uname -m)
 
 echo "========================================="
@@ -14,7 +12,6 @@ echo "Detected Native System Architecture: $MAC_ARCH"
 if [ "$MAC_ARCH" = "arm64" ]; then
     echo "[Processing Architecture] -> Apple Silicon (ARM64)..."
     
-    # Run the native Apple Silicon JDK package installer if you have it
     if [ -f "$DEPS_DIR/jdk-26_macos-aarch64_bin.pkg" ]; then
         installer -pkg "$DEPS_DIR/jdk-26_macos-aarch64_bin.pkg" -target /
         echo "Native Java environment successfully configured."
@@ -34,7 +31,6 @@ elif [ "$MAC_ARCH" = "x86_64" ]; then
     else
         echo "[Error] -> Missing jdk-26_macos-x64_bin.pkg target file."
     fi
-
 else
     echo "Unknown architecture architecture ($MAC_ARCH). Skipping JRE runtime hook."
 fi

@@ -12,6 +12,10 @@ let latestAutopilotStatus = 'UNKNOWN';
 let autopilotEngaged = false; 
 let currentYokePercentage = 0.0; 
 let activeKey = null;
+let steeringPulseState = {
+    isPressed: false,
+    lastSwitchAt: 0
+};
 
 let currentAircraftState = null;
 let currentWaypoints = [];
@@ -55,19 +59,76 @@ function sendJavaCommand(command) {
 }
 
 function pressKey(key) {
-    if (activeKey !== key) {
-        releaseAllKeys();
-        activeKey = key;
-        console.log(`[Electron Loop] Sending command -> PRESS_${key.toUpperCase()}`);
-        sendJavaCommand(`PRESS_${key.toUpperCase()}`);
+    if (activeKey === key) {
+        steeringPulseState.isPressed = true;
+        return;
     }
+
+    if (activeKey) {
+        releaseAllKeys();
+    }
+
+    activeKey = key;
+    steeringPulseState.isPressed = true;
+    steeringPulseState.lastSwitchAt = Date.now();
+
+    console.log(`[Electron Loop] Sending command -> PRESS_${key.toUpperCase()}`);
+    sendJavaCommand(`PRESS_${key.toUpperCase()}`);
 }
 
 function releaseAllKeys() {
-    if (activeKey) {
-        console.log(`[Electron Loop] Sending command -> RELEASE_${activeKey.toUpperCase()}`);
-        sendJavaCommand(`RELEASE_${activeKey.toUpperCase()}`);
-        activeKey = null;
+    if (!activeKey) {
+        steeringPulseState.isPressed = false;
+        return;
+    }
+
+    const keyToRelease = activeKey;
+    activeKey = null;
+    steeringPulseState.isPressed = false;
+
+    console.log(`[Electron Loop] Sending command -> RELEASE_${keyToRelease.toUpperCase()}`);
+    sendJavaCommand(`RELEASE_${keyToRelease.toUpperCase()}`);
+}
+
+function updateSteeringInput() {
+    if (!autopilotEngaged) {
+        if (activeKey) {
+            releaseAllKeys();
+        }
+        return;
+    }
+
+    const absMagnitude = Math.abs(currentYokePercentage);
+    let desiredKey = null;
+
+    if (absMagnitude > 0.5) {
+        desiredKey = currentYokePercentage > 0 ? 'd' : 'a';
+    }
+
+    if (!desiredKey) {
+        if (activeKey) {
+            releaseAllKeys();
+        }
+        steeringPulseState.lastSwitchAt = Date.now();
+        return;
+    }
+
+    if (activeKey && activeKey !== desiredKey) {
+        releaseAllKeys();
+        steeringPulseState.lastSwitchAt = Date.now();
+    }
+
+    const now = Date.now();
+    const normalized = Math.min(100, Math.max(0, absMagnitude)) / 100;
+    const holdMs = 40 + normalized * 180;
+    const restMs = 80 + (1 - normalized) * 220;
+
+    if (!steeringPulseState.isPressed) {
+        if (now - steeringPulseState.lastSwitchAt >= restMs) {
+            pressKey(desiredKey);
+        }
+    } else if (now - steeringPulseState.lastSwitchAt >= holdMs) {
+        releaseAllKeys();
     }
 }
 
@@ -229,6 +290,8 @@ export const stopAutopilotPayload = async () => {
     console.log('[AUTOPILOT] SHUTTING DOWN ENGINE AND DRIVERS SAFELY.');
     autopilotEngaged = false;
     currentYokePercentage = 0.0;
+    steeringPulseState.isPressed = false;
+    steeringPulseState.lastSwitchAt = 0;
     
     sendJavaCommand("RELEASE_ALL");
     sendJavaCommand("EXIT");
@@ -242,6 +305,7 @@ export const stopAutopilotPayload = async () => {
         autopilotProcess.kill();
         autopilotProcess = null;
         latestAutopilotStatus = 'DISENGAGED';
+        yokePercentage = 0.0;
         return true;
     }
     return false;
@@ -253,6 +317,10 @@ export const getAutopilotState = () => {
         pid: autopilotProcess?.pid
     };
 };
+
+setInterval(() => {
+    updateSteeringInput();
+}, 80);
 
 setInterval(() => {
     console.log(`[Loop Tick] Engaged: ${autopilotEngaged} | Yoke Cmd: ${currentYokePercentage}% | Active Key: ${activeKey}`);
@@ -268,17 +336,6 @@ setInterval(() => {
     }
 }, 500);
 
-setInterval(() => {
-    if (autopilotEngaged) {
-        const key = activeKey;
-
-        releaseAllKeys();
-
-        if (key) {
-            pressKey(key);
-        }
-    }
-})
 
 export default {
     initJavaWorker,
