@@ -1,6 +1,6 @@
 {
   "name": "24flight",
-  "version": "1.0.0",
+  "version": "v0.0.1-beta",
   "description": "The PC client for 24Flight.",
   "main": "app/src/server.js",
   "type": "module",
@@ -55,18 +55,39 @@
       "buildResources": "build",
       "output": "dist"
     },
+    "nsis": {
+      "warningsAsErrors": false
+    },
     "mac": {
       "icon": "build/icons/mac/icon.icns",
       "target": [
         "pkg"
       ],
       "sign": false,
-      "hardenedRuntime": false
+      "hardenedRuntime": false,
+      "files": [
+        "install-deps/mac/**/*"
+      ],
+      "extraResources": [
+        {
+          "from": "install-deps/mac/",
+          "to": "install-deps/mac/"
+        }
+      ]
     },
     "win": {
       "icon": "build/icons/win/icon.ico",
       "target": [
         "nsis"
+      ],
+      "files": [
+        "install-deps/win/**/*"
+      ],
+      "extraResources": [
+        {
+          "from": "install-deps/win/",
+          "to": "install-deps/win/"
+        }
       ]
     },
     "linux": {
@@ -77,6 +98,15 @@
         "rpm",
         "pacman",
         "apk"
+      ],
+      "files": [
+        "install-deps/linux/**/*"
+      ],
+      "extraResources": [
+        {
+          "from": "install-deps/linux/",
+          "to": "install-deps/linux/"
+        }
       ]
     },
     "deb": {
@@ -118,10 +148,6 @@
       {
         "from": "apinputworker/InputWorker.jar",
         "to": "apinputworker/InputWorker.jar"
-      },
-      {
-        "from": "install-deps/",
-        "to": "install-deps/"
       }
     ]
   },
