@@ -1,6 +1,6 @@
 {
   "name": "24flight",
-  "version": "0.0.1-beta",
+  "version": "0.1.0-beta",
   "description": "24Flight",
   "main": "app/src/server.js",
   "type": "module",
