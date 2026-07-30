@@ -450,19 +450,14 @@ ipcMain.on('autopilot-route', async (event, route) => {
         }) : [];
 
         try {
-          // 1. SET GLOBAL WAYPOINTS (Crucial for the updater to work)
           setCurrentWaypoints(waypoints);
 
           await firstStateSet(callsign);
 
-          // 2. START C++ PROCESS
           const result = await startAutopilotPayload(waypoints, callsign);
 
-          // 3. START TELEMETRY LOOP
-          // Clear any existing ghost loop just in case
           if (telemetryInterval) clearInterval(telemetryInterval);
 
-          // Send data to C++ 10 times a second (100ms)
           telemetryInterval = setInterval(async () => {
             await updateAutopilotPayload();
           }, 500);
@@ -478,13 +473,11 @@ ipcMain.on('autopilot-route', async (event, route) => {
     } else if (route && route.action === 'disengage') {
       console.log('autopilot disengaged');
 
-      // 1. STOP TELEMETRY LOOP
       if (telemetryInterval) {
         clearInterval(telemetryInterval);
         telemetryInterval = null;
       }
 
-      // 2. KILL C++ PROCESS
       await stopAutopilotPayload();
 
     } else {
@@ -581,10 +574,6 @@ ipcMain.handle('autopilot-stop', () => {
 let overlayWin = null;
 let isOverlayActive = false;
 let isOverlayInteractable = false;
-// Once the overlay has been started and then stopped, it cannot be
-// started again until the Electron app itself is fully closed and
-// relaunched. This lives only in memory for the life of the process,
-// so quitting and reopening the app naturally resets it to false.
 let overlaySessionLocked = false;
 
 function toggleOverlayInteractivity() {
@@ -613,7 +602,6 @@ ipcMain.handle('overlay-start', async (event, options = {}) => {
     let title = (typeof options === 'string' ? options : options?.title) || 'GeoFS';
     title = title.trim();
 
-    // Auto-resolve partial title match against active running windows
     try {
       if (process.platform === 'win32') {
         const { stdout } = await execAsync('powershell -NoProfile -Command "Get-Process | Where-Object {$_.MainWindowTitle -ne \'\'} | Select-Object -ExpandProperty MainWindowTitle"');
@@ -658,10 +646,6 @@ ipcMain.handle('overlay-start', async (event, options = {}) => {
         } catch (e) { }
       });
 
-      // electron-overlay-window's native hook can force this window visible
-      // again to keep it synced with the target window (e.g. on the target
-      // regaining focus). Once the session is locked (overlay stopped), fight
-      // that by immediately re-hiding it rather than destroying the window.
       overlayWin.on('show', () => {
         if (overlaySessionLocked && overlayWin && !overlayWin.isDestroyed()) {
           try { overlayWin.hide(); } catch (e) { }
@@ -705,12 +689,6 @@ ipcMain.handle('overlay-stop', () => {
       try {
         OverlayController.focusTarget();
       } catch (e) { }
-      // Do NOT close()/destroy this window: electron-overlay-window's native
-      // addon holds a live OS-level hook on it, and destroying the window out
-      // from under that hook crashes the whole Electron process. hide() +
-      // ignoring mouse events is the safe way to make it disappear; the
-      // 'show' guard registered at window creation stops the hook from
-      // re-forcing it visible once the session is locked (see below).
       try { overlayWin.setIgnoreMouseEvents(true, { forward: true }); } catch (e) { }
       overlayWin.hide();
     }
