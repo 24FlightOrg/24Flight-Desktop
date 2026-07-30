@@ -51,3 +51,14 @@ contextBridge.exposeInMainWorld('discordRPC', {
 contextBridge.exposeInMainWorld('notificationService', {
   notify: (title, body) => ipcRenderer.invoke('show-notification', { title, body }),
 });
+
+contextBridge.exposeInMainWorld('overlay', {
+  start: (options) => ipcRenderer.invoke('overlay-start', options),
+  stop: () => ipcRenderer.invoke('overlay-stop'),
+  getStatus: () => ipcRenderer.invoke('get-overlay-status'),
+  focusTarget: () => ipcRenderer.invoke('overlay-focus-target'),
+  activateOverlay: () => ipcRenderer.invoke('overlay-activate'),
+  onFocusChange: (cb) => ipcRenderer.on('focus-change', (_, state) => cb(state)),
+  getWindowTitles: () => ipcRenderer.invoke('get-window-titles'),
+  setIgnoreMouseEvents: (ignore, options) => ipcRenderer.invoke('overlay-set-ignore-mouse-events', ignore, options)
+});

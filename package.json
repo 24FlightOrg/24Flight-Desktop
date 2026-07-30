@@ -1,33 +1,33 @@
 {
   "name": "24flight",
-  "version": "v0.0.1-beta",
-  "description": "The PC client for 24Flight.",
+  "version": "0.0.1-beta",
+  "description": "24Flight",
   "main": "app/src/server.js",
   "type": "module",
-  "homepage": "https://github.com/24FlightOrg/24FlightSystem#readme",
+  "homepage": "https://github.com",
   "bugs": {
-    "url": "https://github.com/24FlightOrg/24FlightSystem/issues"
+    "url": "https://github.com"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/24FlightOrg/24FlightSystem.git"
+    "url": "git+https://github.com"
   },
   "license": "MIT",
   "author": "GreenvillSSnick & scythe_dev <support@24flight.org>",
   "contributors": [
     {
       "name": "GreenvillSSnick",
-      "url": "https://github.com/GreenvillSSnick",
+      "url": "https://github.com",
       "email": "green@24flight.org"
     },
     {
       "name": "scythe_dev",
-      "url": "https://github.com/PilotJDK",
+      "url": "https://github.com",
       "email": "scythe@24flight.org"
     },
     {
       "name": "awdev",
-      "url": "https://github.com/awdev1",
+      "url": "https://github.com",
       "email": "awdev@24flight.org"
     }
   ],
@@ -36,7 +36,6 @@
     "build:externals": "npm run build:autopilot && npm run build:apinputworker",
     "build:autopilot": "node scripts/build-autopilot.js",
     "build:apinputworker": "node scripts/build-apinputworker.js",
-    "build:win-e:autopilot": "powershell -NoProfile -Command \"if (Test-Path 'autopilot/build') { Remove-Item 'autopilot/build' -Recurse -Force -ErrorAction SilentlyContinue }\" && cmake -S autopilot -B autopilot/build -G \"Visual Studio 18 2026\" -A x64 && cmake --build autopilot/build --config Release",
     "start": "npm run build:externals && npx electron .",
     "build": "npm run build:externals && npx electron-builder --win --mac",
     "build:all": "npm run build:externals && npx electron-builder --win --mac --linux",
@@ -56,8 +55,18 @@
       "output": "dist"
     },
     "nsis": {
-      "warningsAsErrors": false
+      "warningsAsErrors": false,
+      "oneClick": false,
+      "include": "build/installer.nsh",
+      "license": "LICENSE.md",
+      "runAfterFinish": true,
+      "allowElevation": true,
+      "perMachine": true
     },
+    "files": [
+      "package.json",
+      "app/**/*"
+    ],
     "mac": {
       "icon": "build/icons/mac/icon.icns",
       "target": [
@@ -65,13 +74,22 @@
       ],
       "sign": false,
       "hardenedRuntime": false,
-      "files": [
-        "install-deps/mac/**/*"
-      ],
       "extraResources": [
         {
-          "from": "install-deps/mac/",
-          "to": "install-deps/mac/"
+          "from": "install-deps/mac",
+          "to": "install-deps/mac"
+        },
+        {
+          "from": "autopilot/autopilot.exe",
+          "to": "autopilot/autopilot.exe"
+        },
+        {
+          "from": "autopilot/autopilot",
+          "to": "autopilot/autopilot"
+        },
+        {
+          "from": "apinputworker/InputWorker.jar",
+          "to": "apinputworker/InputWorker.jar"
         }
       ]
     },
@@ -80,13 +98,22 @@
       "target": [
         "nsis"
       ],
-      "files": [
-        "install-deps/win/**/*"
-      ],
       "extraResources": [
         {
-          "from": "install-deps/win/",
-          "to": "install-deps/win/"
+          "from": "install-deps/win",
+          "to": "install-deps/win"
+        },
+        {
+          "from": "autopilot/autopilot.exe",
+          "to": "autopilot/autopilot.exe"
+        },
+        {
+          "from": "autopilot/autopilot",
+          "to": "autopilot/autopilot"
+        },
+        {
+          "from": "apinputworker/InputWorker.jar",
+          "to": "apinputworker/InputWorker.jar"
         }
       ]
     },
@@ -99,13 +126,22 @@
         "pacman",
         "apk"
       ],
-      "files": [
-        "install-deps/linux/**/*"
-      ],
       "extraResources": [
         {
-          "from": "install-deps/linux/",
-          "to": "install-deps/linux/"
+          "from": "install-deps/linux",
+          "to": "install-deps/linux"
+        },
+        {
+          "from": "autopilot/autopilot.exe",
+          "to": "autopilot/autopilot.exe"
+        },
+        {
+          "from": "autopilot/autopilot",
+          "to": "autopilot/autopilot"
+        },
+        {
+          "from": "apinputworker/InputWorker.jar",
+          "to": "apinputworker/InputWorker.jar"
         }
       ]
     },
@@ -128,31 +164,12 @@
       "depends": [
         "openjdk26"
       ]
-    },
-    "files": [
-      "package.json",
-      "app/**/*",
-      "autopilot/autopilot.exe",
-      "apinputworker/InputWorker.jar",
-      "install-deps/**/*"
-    ],
-    "extraResources": [
-      {
-        "from": "autopilot/autopilot.exe",
-        "to": "autopilot/autopilot.exe"
-      },
-      {
-        "from": "autopilot/autopilot",
-        "to": "autopilot/autopilot"
-      },
-      {
-        "from": "apinputworker/InputWorker.jar",
-        "to": "apinputworker/InputWorker.jar"
-      }
-    ]
+    }
   },
   "dependencies": {
     "discord-rpc-electron": "^4.0.2",
+    "electron-overlay-window": "^4.1.0",
+    "electron-updater": "^6.8.9",
     "express": "^5.2.1",
     "sudo-prompt": "^9.2.1",
     "ws": "^8.19.0"

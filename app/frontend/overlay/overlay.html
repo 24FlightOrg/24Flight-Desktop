@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>24Flight Overlay</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="../areas/css/map.css" />
+    <style>
+        html,
+        body {
+            background: transparent !important;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            top: 100px;
+            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            pointer-events: none;
+        }
+
+        #overlay-map-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 500px;
+            height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+            background: rgba(17, 17, 17, 0.85);
+            backdrop-filter: blur(6px);
+            pointer-events: auto;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        #overlay-hud {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 16px;
+            color: #fff;
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+        }
+
+        .hud-brand {
+            font-weight: bold;
+            color: #0af;
+            font-size: 14px;
+        }
+
+        .hud-val {
+            font-size: 13px;
+            color: #eee;
+        }
+
+        #btn-stop-overlay-hud {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        #btn-stop-overlay-hud:hover {
+            background: #cc0000;
+        }
+
+        /* Aircraft detail card */
+        #overlay-acft-card {
+            position: absolute;
+            bottom: 540px;
+            left: 20px;
+            width: 320px;
+            background: rgba(14, 14, 18, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 170, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 170, 255, 0.1);
+            color: #fff;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            pointer-events: auto;
+            z-index: 2000;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none;
+        }
+
+        #overlay-acft-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .acft-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .acft-card-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .acft-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #00e676;
+            box-shadow: 0 0 6px #00e676;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .acft-card-close {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #aaa;
+            font-size: 16px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, color 0.15s;
+            line-height: 1;
+        }
+
+        .acft-card-close:hover {
+            background: rgba(255, 60, 60, 0.25);
+            color: #ff6b6b;
+        }
+
+        .acft-callsign-row {
+            padding: 10px 16px 4px;
+        }
+
+        .acft-callsign-main {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0af;
+            font-family: 'Roboto Mono', monospace;
+            letter-spacing: 1px;
+        }
+
+        .acft-callsign-sub {
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .acft-data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            padding: 8px 16px 14px;
+        }
+
+        .acft-data-item {
+            padding: 8px 6px;
+            border-radius: 6px;
+        }
+
+        .acft-data-label {
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 3px;
+        }
+
+        .acft-data-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e8e8e8;
+            font-family: 'Roboto Mono', monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="overlay-hud">
+        <div class="hud-brand">24FLIGHT HUD</div>
+        <div id="hud-callsign" class="hud-val">CS: --</div>
+        <div id="hud-spd" class="hud-val">SPD: -- kts</div>
+        <div id="hud-alt" class="hud-val">ALT: -- ft</div>
+        <div id="hud-hdg" class="hud-val">HDG: ---°</div>
+        <button id="btn-stop-overlay-hud" type="button">Stop Overlay</button>
+    </div>
+
+    <div id="overlay-map-container">
+        <div id="map"></div>
+        <div class="corner-info">
+            <div class="clock-row">
+                <img src="https://24flight.org/unified/icons/corner-info/clock.png" alt="Clock"> <span
+                    id="utc-time">--:--:-- UTC</span>
+            </div>
+            <div class="wind-row">
+                <img src="https://24flight.org/unified/icons/corner-info/wind.png" alt="Wind"> <span id="wind-info">---°
+                    @ --kts</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aircraft detail card -->
+    <div id="overlay-acft-card">
+        <div class="acft-card-header">
+            <div class="acft-card-status">
+                <div class="acft-status-dot"></div>
+                <span>LIVE</span>
+            </div>
+            <button class="acft-card-close" id="btn-close-acft-card" title="Close">✕</button>
+        </div>
+        <div class="acft-callsign-row">
+            <div class="acft-callsign-main" id="acft-card-callsign">--</div>
+            <div class="acft-callsign-sub" id="acft-card-player"></div>
+        </div>
+        <div class="acft-data-grid">
+            <div class="acft-data-item">
+                <div class="acft-data-label">FP Callsign</div>
+                <div class="acft-data-value" id="acft-card-fp-callsign">-</div>
+            </div>
+            <div class="acft-data-item">
+                <div class="acft-data-label">Type</div>
+                <div class="acft-data-value" id="acft-card-type">-</div>
+            </div>
+            <div class="acft-data-item">
+                <div class="acft-data-label">Altitude</div>
+                <div class="acft-data-value" id="acft-card-alt">-</div>
+            </div>
+            <div class="acft-data-item">
+                <div class="acft-data-label">Speed</div>
+                <div class="acft-data-value" id="acft-card-spd">-</div>
+            </div>
+            <div class="acft-data-item">
+                <div class="acft-data-label">Heading</div>
+                <div class="acft-data-value" id="acft-card-hdg">-</div>
+            </div>
+            <div class="acft-data-item">
+                <div class="acft-data-label">Position</div>
+                <div class="acft-data-value" id="acft-card-pos">-</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/data.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetCallsign = urlParams.get('callsign') || '';
+
+        const mapMinZoom = 0;
+        const mapMaxZoom = 8;
+
+        const imageWidth = 14453 * mapMaxZoom;
+        const imageHeight = 13800 * mapMaxZoom;
+
+        const mapMaxResolution = 2.0;
+        const mapMinResolution = Math.pow(2, mapMaxZoom) * mapMaxResolution;
+
+        const mapExtent = [0, imageHeight, imageWidth, 0];
+        const tileExtent = [0, imageHeight, imageWidth, 0];
+
+        const ptfsBounds = {
+            top_left: { x: -49222.1, y: -45890.8 },
+            bottom_right: { x: 47132.9, y: 46139.2 }
+        };
+
+        const ptfsCenter = {
+            x: (ptfsBounds.top_left.x + ptfsBounds.bottom_right.x) / 2,
+            y: (ptfsBounds.top_left.y + ptfsBounds.bottom_right.y) / 2
+        };
+
+        const ptfsWidth = ptfsBounds.bottom_right.x - ptfsBounds.top_left.x;
+        const ptfsHeight = ptfsBounds.bottom_right.y - ptfsBounds.top_left.y;
+
+        const scaleX = imageWidth / ptfsWidth;
+        const scaleY = imageHeight / ptfsHeight;
+        const scale = Math.min(scaleX, scaleY);
+
+        let selectedOverlayCallsign = null;
+        let lastAircraftData = {};
+        let overlayFlightPlans = {};
+
+        // --- Aircraft detail card ---
+        function resolveCardCallsign(ac, callsign) {
+            const plan = ac?.playerName && overlayFlightPlans[ac.playerName];
+            return plan?.callsign || ac?.callsign || callsign || '--';
+        }
+
+        function populateCard(callsign) {
+            const ac = lastAircraftData[callsign];
+            if (!ac) return;
+            const plan = ac?.playerName && overlayFlightPlans[ac.playerName];
+            const display = resolveCardCallsign(ac, callsign);
+
+            document.getElementById('acft-card-callsign').textContent = display;
+            document.getElementById('acft-card-player').textContent = ac.playerName ? `Player: ${ac.playerName}` : '';
+            document.getElementById('acft-card-fp-callsign').textContent = plan?.callsign || ac?.callsign || callsign || '-';
+            document.getElementById('acft-card-type').textContent = ac.aircraftType || '-';
+            document.getElementById('acft-card-alt').textContent = ac.altitude ? `FL${Math.round(ac.altitude / 100)}` : '-';
+            document.getElementById('acft-card-spd').textContent = ac.speed ? `${Math.round(ac.speed)}kts` : '-';
+            document.getElementById('acft-card-hdg').textContent = ac.heading != null ? `${Math.round(ac.heading)}°` : '-';
+            document.getElementById('acft-card-pos').textContent = ac.position ? `${Math.round(ac.position.x)}, ${Math.round(ac.position.y)}` : '-';
+        }
+
+        function openAircraftCard(callsign) {
+            selectedOverlayCallsign = callsign;
+            populateCard(callsign);
+            const card = document.getElementById('overlay-acft-card');
+            card.classList.add('visible');
+        }
+
+        function closeAircraftCard() {
+            selectedOverlayCallsign = null;
+            document.getElementById('overlay-acft-card').classList.remove('visible');
+        }
+
+        document.getElementById('btn-close-acft-card').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeAircraftCard();
+        });
+
+        // --- Map init ---
+
+        const crs = L.CRS.Simple;
+        crs.transformation = new L.Transformation(1, -tileExtent[0], -1, tileExtent[3] + imageHeight);
+        crs.scale = function (zoom) {
+            return Math.pow(2, zoom) / mapMinResolution;
+        };
+        crs.zoom = function (scale) {
+            return Math.log(scale * mapMinResolution) / Math.LN2;
+        };
+
+        const map = L.map('map', {
+            crs: crs,
+            minZoom: mapMinZoom,
+            maxZoom: mapMaxZoom,
+            zoomSnap: 0.25,
+            attributionControl: false,
+            zoomControl: true,
+            dragging: true,
+            scrollWheelZoom: true,
+            doubleClickZoom: true,
+            boxZoom: true,
+            touchZoom: true
+        });
+
+        L.tileLayer('https://prod.24flight.org/ptfs/regular/{z}/{x}/{y}.png', {
+            minZoom: mapMinZoom,
+            maxZoom: mapMaxZoom,
+            maxNativeZoom: mapMaxZoom,
+            tileSize: L.point(256, 512),
+            noWrap: true,
+            tms: false,
+        }).addTo(map);
+
+        map.setView(crs.unproject(L.point(imageWidth / 2, imageHeight / 2)), 2);
+
+        function apiPositionToLatLng(apiX, apiY) {
+            const offsetY = 8;
+            const adjustedY = apiY - offsetY;
+            const dx = apiX - ptfsCenter.x;
+            const dy = adjustedY - ptfsCenter.y;
+            const mapX = (imageWidth / 2) + dx * scale;
+            const mapY = (imageHeight / 2) - dy * scale;
+            return [mapY, mapX];
+        }
+
+        function waypointPositionToLatLng(px, py) {
+            return [imageHeight - (py * mapMaxZoom), (px * mapMaxZoom)];
+        }
+
+        const aircraftMarkers = new Map();
+        const aircraftLabelMarkers = new Map();
+        const LABEL_Y_OFFSET = 0.08;
+
+        const AIRCRAFT_NAMES = (typeof aircraftNames !== 'undefined') ? aircraftNames : {};
+        const AIRCRAFT_CODES = (typeof aircraftCodes !== 'undefined') ? aircraftCodes : {};
+        const INGAME_TO_ICAO = (typeof AIRLINE_MAP !== 'undefined')
+            ? Object.fromEntries(
+                Object.entries(AIRLINE_MAP).flatMap(([name, v]) => {
+                    const icao = v.icao && v.icao.toUpperCase();
+                    const entries = [];
+                    entries.push([name.toLowerCase(), icao]);
+                    if (v.ingame) entries.push([v.ingame.toLowerCase(), icao]);
+                    if (v.radio && v.radio !== v.ingame) entries.push([v.radio.toLowerCase(), icao]);
+                    return entries;
+                })
+            )
+            : {};
+
+        function computeIcaoPrefixedCallsign(callsign) {
+            if (!callsign) return callsign;
+            const parts = callsign.split(/[-\s]/);
+            const prefix = (parts[0] || '').toLowerCase();
+            if (prefix && INGAME_TO_ICAO[prefix]) {
+                parts[0] = INGAME_TO_ICAO[prefix];
+                return parts.join(' ');
+            }
+            return callsign;
+        }
+
+        function computeLabelHtml(zoom, callsign, ac) {
+            const displayCallsign = callsign;
+            if (zoom <= 3) {
+                return `<div style="font-family: 'Roboto Mono', monospace; font-size:10px; color:#fff; padding:2px 6px; border-radius:4px; text-align:center;"><div>${displayCallsign}</div></div>`;
+            }
+            const rawType = ac?.aircraftType || "?";
+            const type = AIRCRAFT_NAMES[rawType] || rawType;
+            const alt = ac?.altitude ? `FL${Math.round(ac.altitude / 100)}` : "?";
+            const speed = ac?.speed ? `${Math.round(ac.speed)}kts` : "?";
+            return `<div style="font-family: 'Roboto Mono', monospace; font-size:11px; color:#fff; padding:3px 6px; border-radius:4px; text-align:left;"><div>${displayCallsign}</div><div>${type} ${alt}</div><div>${speed}</div></div>`;
+        }
+
+        function plotAircraft(data) {
+            const callsigns = Object.keys(data);
+            const activeSet = new Set(callsigns);
+
+            for (const oldCallsign of aircraftMarkers.keys()) {
+                if (!activeSet.has(oldCallsign)) {
+                    map.removeLayer(aircraftMarkers.get(oldCallsign));
+                    aircraftMarkers.delete(oldCallsign);
+                    if (aircraftLabelMarkers.has(oldCallsign)) {
+                        const prev = aircraftLabelMarkers.get(oldCallsign);
+                        if (prev.label) map.removeLayer(prev.label);
+                        if (prev.line) map.removeLayer(prev.line);
+                        aircraftLabelMarkers.delete(oldCallsign);
+                    }
+                }
+            }
+
+            let centeredOnTarget = false;
+
+            for (const callsign of callsigns) {
+                const ac = data[callsign];
+                if (!ac.position) continue;
+                const [lat, lng] = apiPositionToLatLng(ac.position.x, ac.position.y);
+                const heading = ac.heading || 0;
+
+                if (targetCallsign && callsign === targetCallsign) {
+                    centeredOnTarget = true;
+                    map.panTo([lat, lng]);
+
+                    document.getElementById('hud-callsign').textContent = `CS: ${callsign}`;
+                    document.getElementById('hud-spd').textContent = `SPD: ${Math.round(ac.speed || 0)} kts`;
+                    document.getElementById('hud-alt').textContent = `ALT: ${Math.round(ac.altitude || 0)} ft`;
+                    document.getElementById('hud-hdg').textContent = `HDG: ${Math.round(ac.heading || 0)}°`;
+                }
+
+                let marker;
+                if (aircraftMarkers.has(callsign)) {
+                    marker = aircraftMarkers.get(callsign);
+                    marker.setLatLng([lat, lng]);
+                    const iconImg = marker.getElement()?.querySelector("img");
+                    if (iconImg) iconImg.style.transform = `rotate(${heading}deg)`;
+                } else {
+                    const icon = L.divIcon({
+                        className: "aircraft-icon",
+                        html: `<img src="https://24flight.org/unified/icons/aircraft/default/testaircraft.png" style="transform: rotate(${heading}deg); width: 28px; height: 28px; cursor: pointer;" alt="aircraft">`,
+                        iconSize: [28, 28],
+                        iconAnchor: [14, 14]
+                    });
+                    // interactive: true (default) so click events fire
+                    marker = L.marker([lat, lng], { icon }).addTo(map);
+                    aircraftMarkers.set(callsign, marker);
+                }
+
+                // Wire click to open detail card
+                marker.off('click');
+                marker.on('click', (e) => {
+                    L.DomEvent.stopPropagation(e);
+                    openAircraftCard(callsign);
+                });
+
+                const currentZoom = map.getZoom();
+                const labelCallsign = computeIcaoPrefixedCallsign(callsign);
+                const infoText = computeLabelHtml(currentZoom, labelCallsign, ac);
+                const labelIcon = L.divIcon({
+                    className: "aircraft-label",
+                    html: infoText,
+                    iconAnchor: [-5, 14]
+                });
+
+                if (aircraftLabelMarkers.has(callsign)) {
+                    const prev = aircraftLabelMarkers.get(callsign);
+                    if (prev.line) map.removeLayer(prev.line);
+                    if (prev.label) map.removeLayer(prev.label);
+                }
+
+                const labelMarker = L.marker([lat + LABEL_Y_OFFSET, lng], { icon: labelIcon, interactive: false }).addTo(map);
+                const line = L.polyline([[lat, lng], [lat + LABEL_Y_OFFSET, lng]], {
+                    color: 'white',
+                    weight: 1.5,
+                    opacity: 0.7,
+                    dashArray: '4,4'
+                }).addTo(map);
+
+                aircraftLabelMarkers.set(callsign, { label: labelMarker, line });
+            }
+
+            if (!centeredOnTarget && targetCallsign) {
+                document.getElementById('hud-callsign').textContent = `CS: ${targetCallsign} (Not found)`;
+            }
+        }
+
+        // Close card on map background click
+        map.on('click', () => {
+            closeAircraftCard();
+        });
+
+        if (window['24data']) {
+            window['24data'].onMessage((data) => {
+                try {
+                    const msg = JSON.parse(data);
+                    if (msg.type === 'acft' && msg.payload) {
+                        lastAircraftData = msg.payload;
+                        const firstAircraft = Object.values(msg.payload)[0];
+                        let windText = "Wind N/A";
+                        if (firstAircraft?.wind && /^\d{1,3}\/\d{1,3}$/.test(firstAircraft.wind)) {
+                            const [dir, spd] = firstAircraft.wind.split("/").map(Number);
+                            windText = `${dir}° @ ${spd}kts`;
+                        }
+                        document.getElementById("wind-info").textContent = windText;
+
+                        plotAircraft(msg.payload);
+
+                        // Live-update card if open
+                        if (selectedOverlayCallsign && document.getElementById('overlay-acft-card').classList.contains('visible')) {
+                            populateCard(selectedOverlayCallsign);
+                        }
+                    }
+                    if (msg.type === 'flightplans' && Array.isArray(msg.payload)) {
+                        overlayFlightPlans = {};
+                        msg.payload.forEach(plan => {
+                            if (plan.robloxName) overlayFlightPlans[plan.robloxName] = plan;
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error in overlay map WS message:', e);
+                }
+            });
+        }
+
+        function updateUTCClock() {
+            const now = new Date();
+            const utcHours = String(now.getUTCHours()).padStart(2, '0');
+            const utcMinutes = String(now.getUTCMinutes()).padStart(2, '0');
+            const utcSeconds = String(now.getUTCSeconds()).padStart(2, '0');
+            document.getElementById("utc-time").textContent = `${utcHours}:${utcMinutes}:${utcSeconds} UTC`;
+        }
+        setInterval(updateUTCClock, 1000);
+
+        if (typeof Fixes !== 'undefined' && Array.isArray(Fixes)) {
+            renderFixes(Fixes);
+        }
+
+        function renderFixes(list) {
+            list.forEach(({ name, px, py, size, type }) => {
+                let iconurl = null;
+                let iconcss = null;
+                const [lat, lng] = waypointPositionToLatLng(px, py);
+
+                if (type === "waypoint") {
+                    iconurl = "https://24flight.org/unified/icons/map/Fix.RNAVFlyOver.png";
+                    iconcss = "waypoint-black";
+                } else if (type === "aprt.serv.twr" || type === "aprt.priv.twr" || type === "aprt.mltry.twr" || type === "aprt.twr") {
+                    iconurl = "https://24flight.org/unified/icons/map/1Airport.Serv.Tower.png";
+                    iconcss = "blue-label";
+                } else {
+                    iconurl = "https://24flight.org/unified/icons/map/4Airport.png";
+                    iconcss = "pink-label";
+                }
+
+                const icon = L.divIcon({
+                    className: "waypoint-icon",
+                    html: `
+                        <div class="fix-wrapper" style="width:${size}px; height:${size}px;">
+                            <div class="${iconcss}">${name}</div>
+                            <img src="${iconurl}" style="width:${size}px; height:${size}px;">
+                        </div>
+                    `,
+                    iconSize: [size, size],
+                    iconAnchor: [size / 2, size / 2]
+                });
+                L.marker([lat, lng], { icon, interactive: false }).addTo(map);
+            });
+        }
+
+        const stopBtn = document.getElementById('btn-stop-overlay-hud');
+        if (stopBtn) {
+            stopBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (window.overlay && typeof window.overlay.stop === 'function') {
+                    window.overlay.stop();
+                }
+            });
+        }
+
+        // Listen for focus-change from main process (triggered by Ctrl+Shift+O shortcut or blur)
+        if (window.overlay && typeof window.overlay.onFocusChange === 'function') {
+            window.overlay.onFocusChange((isInteractable) => {
+                if (typeof window.overlay.setIgnoreMouseEvents === 'function') {
+                    if (isInteractable) {
+                        // Overlay is active — receive mouse events
+                        window.overlay.setIgnoreMouseEvents(false);
+                    } else {
+                        // Overlay inactive — pass clicks through
+                        window.overlay.setIgnoreMouseEvents(true, { forward: true });
+                    }
+                }
+            });
+        }
+
+        // Hover-based interactivity: mouseenter on UI panels activates overlay,
+        // mouseleave passes clicks back through to target window.
+        const interactiveContainers = [
+            document.getElementById('overlay-map-container'),
+            document.getElementById('overlay-hud'),
+            document.getElementById('overlay-acft-card')
+        ];
+        interactiveContainers.forEach(container => {
+            if (!container) return;
+            container.addEventListener('mouseenter', () => {
+                if (window.overlay) {
+                    if (typeof window.overlay.setIgnoreMouseEvents === 'function') {
+                        window.overlay.setIgnoreMouseEvents(false);
+                    }
+                    if (typeof window.overlay.activateOverlay === 'function') {
+                        window.overlay.activateOverlay();
+                    }
+                }
+            });
+            container.addEventListener('mouseleave', () => {
+                if (window.overlay) {
+                    if (typeof window.overlay.setIgnoreMouseEvents === 'function') {
+                        window.overlay.setIgnoreMouseEvents(true, { forward: true });
+                    }
+                    if (typeof window.overlay.focusTarget === 'function') {
+                        window.overlay.focusTarget();
+                    }
+                }
+            });
+        });
+
+        // Initialize: pass all clicks through transparent areas by default
+        if (window.overlay && typeof window.overlay.setIgnoreMouseEvents === 'function') {
+            window.overlay.setIgnoreMouseEvents(true, { forward: true });
+        }
+    </script>
+</body>
+
+</html>

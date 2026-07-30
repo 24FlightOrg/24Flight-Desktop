@@ -1,20 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>24Flight - Overlay</title>
     <link rel="stylesheet" href="/topbar/topbar.css" />
     <link rel="stylesheet" href="css/area.css" />
+    <link rel="stylesheet" href="css/overlay.css" />
 </head>
+
 <body>
     <div class="top-bar" id="top-bar"></div>
 
     <div class="content">
-        <h1>Overlay</h1>
-        <p>Overlay feature coming soon...</p>
-    </div>
+        <div class="overlay-container">
+            <div>
+                <h1>In-Game Window Overlay</h1>
+                <p>Attach a transparent flight HUD and map overlay onto any game or simulator window.</p>
+            </div>
 
+            <div class="field-group">
+                <label for="window-title-select">Select Running Window</label>
+                <div style="display: flex; gap: 8px;">
+                    <select id="window-title-select" class="input-control">
+                        <option value="">Detecting running windows...</option>
+                    </select>
+                    <button type="button" id="btn-refresh-windows" class="chip-btn"
+                        style="white-space: nowrap; border-radius: 6px; padding: 0 12px;">Refresh</button>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label for="window-title">Target Window Title / Search String</label>
+                <input type="text" id="window-title" class="input-control" placeholder="e.g. Roblox" value="Roblox" />
+                <div class="preset-chips">
+                    <button type="button" class="chip-btn" data-target="Roblox">Roblox</button>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label for="callsign-select">Aircraft Callsign (Optional)</label>
+                <select id="callsign-select" class="input-control">
+                    <option value="">All / Automatic</option>
+                </select>
+            </div>
+
+            <div class="status-card">
+                <div class="status-indicator">
+                    <div class="status-dot inactive" id="status-dot"></div>
+                    <span id="status-text">Overlay Inactive</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button type="button" id="btn-start-overlay" class="btn-primary">Start Overlay</button>
+                <button type="button" id="btn-stop-overlay" class="btn-secondary" disabled>Stop Overlay</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         window.topBarSettings = {
@@ -22,5 +66,7 @@
         };
     </script>
     <script src="/topbar/topbar.js"></script>
+    <script src="js/overlay.js"></script>
 </body>
+
 </html>

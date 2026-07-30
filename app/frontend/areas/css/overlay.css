@@ -1,0 +1,157 @@
+.overlay-container {
+    max-width: 600px;
+    width: 100%;
+    background: rgba(30, 30, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.overlay-container h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.overlay-container p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-control {
+    width: 100%;
+    padding: 12px 14px;
+    background: #181818;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-control:focus {
+    border-color: #0af;
+}
+
+.preset-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.chip-btn {
+    background: #252526;
+    border: 1px solid #444;
+    color: #ccc;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chip-btn:hover {
+    background: #0af;
+    color: #fff;
+    border-color: #0af;
+}
+
+.status-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: #181818;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #666;
+}
+
+.status-dot.active {
+    background: #00ff88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+}
+
+.status-dot.inactive {
+    background: #ff4444;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-primary {
+    flex: 1;
+    padding: 12px;
+    background: #0af;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: #0088cc;
+}
+
+.btn-secondary {
+    flex: 1;
+    padding: 12px;
+    background: #d93838;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #b32424;
+}
+
+.btn-secondary:disabled, .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

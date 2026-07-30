@@ -2,11 +2,19 @@ import { app, BrowserWindow, Menu, ipcMain, safeStorage, globalShortcut } from '
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+const execAsync = promisify(exec);
 import express from "express";
-import { initWS, sendWS, getWSStatus, latestWorldState } from './ws/24data.js';
+import { initWS, sendWS, getWSStatus, latestWorldState, setOverlayWindow } from './ws/24data.js';
+
+import { OverlayController, OVERLAY_WINDOW_OPTS } from 'electron-overlay-window'
+
 import discordrpcimport from './ipc/discord.cjs'
-import { initAutopilot, startAutopilotPayload, updateAutopilotPayload, getAutopilotStatus, stopAutopilotPayload, setCurrentWaypoints, setCurrentAircraftState } from './ipc/index.js'
 const { setupRPC, getStartTimestamp, setStartTimestamp } = discordrpcimport;
+import { initAutopilot, startAutopilotPayload, updateAutopilotPayload, getAutopilotStatus, stopAutopilotPayload, setCurrentWaypoints, setCurrentAircraftState } from './ipc/index.js'
+import updaterimport from 'electron-updater';
+const { autoUpdater } = updaterimport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -84,7 +92,56 @@ function deleteStoredToken() {
   }
 }
 
+function setupAutoUpdater() {
+  autoUpdater.setFeedURL({
+    provider: "generic",
+    url: "https://githubusercontent.com"
+  });
+
+  autoUpdater.forceDevUpdateConfig = true;
+
+  autoUpdater.on('checking-for-update', () => {
+    console.log('Checking for updates...');
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    console.log(`Update found! Version ${info.version} is downloading automatically...`);
+  });
+
+  autoUpdater.on('update-not-available', () => {
+    console.log('Application is up to date.');
+  });
+
+  autoUpdater.on('error', (err) => {
+    console.error('Error running the auto-updater: ', err);
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    dialog.showMessageBox(mainWindow, {
+      type: 'info',
+      buttons: ['Restart and Update Now', 'Later'],
+      defaultId: 0,
+      title: 'Update Ready!',
+      message: `A new version (${info.version}) of 24Flight Desktop is ready to install.`,
+      detail: 'The app will close down briefly to complete the update configuration.'
+    }).then((result) => {
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall();
+      }
+    });
+  });
+
+  autoUpdater.checkForUpdatesAndNotify();
+
+  setInterval(() => {
+    autoUpdater.checkForUpdatesAndNotify();
+  }, 7200000);
+}
+
+app.disableHardwareAcceleration();
+
 app.whenReady().then(async () => {
+  setupAutoUpdater();
   let isLoggedIn = false;
   const storedToken = getStoredToken();
 
@@ -107,6 +164,10 @@ app.whenReady().then(async () => {
 
   globalShortcut.register('CommandOrControl+Shift+Alt+K', () => {
     stopAutopilotPayload();
+  });
+
+  globalShortcut.register('CommandOrControl+J', () => {
+    toggleOverlayInteractivity();
   });
 
   let windowHeight = 600;
@@ -328,7 +389,7 @@ ipcMain.handle('get-login', () => {
   return isLoggedIn;
 });
 
-let telemetryInterval = null; 
+let telemetryInterval = null;
 
 export let autopilotCallsign = null;
 
@@ -345,13 +406,13 @@ async function firstStateSet(callsign) {
       heading: targetAircraft.heading || 0,
       speed: targetAircraft.speed || 0,
     });
-    
+
     autopilotCallsign = callsign;
     return true;
   }
 
   console.log(`[State Set] Could not find aircraft with callsign: ${callsign}`);
-  return false; 
+  return false;
 }
 
 ipcMain.on('autopilot-stop', async (event) => {
@@ -361,7 +422,7 @@ ipcMain.on('autopilot-stop', async (event) => {
       telemetryInterval = null;
     }
 
-    
+
   } catch (err) {
     console.error('Error stopping autopilot:', err);
   }
@@ -370,10 +431,10 @@ ipcMain.on('autopilot-stop', async (event) => {
 ipcMain.on('autopilot-route', async (event, route) => {
   try {
     console.log('Autopilot route received from renderer:', route);
-    
+
     if (route && route.action === 'engage') {
       console.log('autopilot engaged');
-      
+
       if (route.route) {
         console.log('Route details:', route.route);
         const callsign = route.route.callsign || route.route.aircraft || '';
@@ -400,7 +461,7 @@ ipcMain.on('autopilot-route', async (event, route) => {
           // 3. START TELEMETRY LOOP
           // Clear any existing ghost loop just in case
           if (telemetryInterval) clearInterval(telemetryInterval);
-          
+
           // Send data to C++ 10 times a second (100ms)
           telemetryInterval = setInterval(async () => {
             await updateAutopilotPayload();
@@ -416,7 +477,7 @@ ipcMain.on('autopilot-route', async (event, route) => {
       }
     } else if (route && route.action === 'disengage') {
       console.log('autopilot disengaged');
-      
+
       // 1. STOP TELEMETRY LOOP
       if (telemetryInterval) {
         clearInterval(telemetryInterval);
@@ -425,7 +486,7 @@ ipcMain.on('autopilot-route', async (event, route) => {
 
       // 2. KILL C++ PROCESS
       await stopAutopilotPayload();
-      
+
     } else {
       console.log('autopilot action unknown:', route && route.action);
     }
@@ -515,4 +576,216 @@ ipcMain.handle('update-discord-activity', (event, state) => {
 
 ipcMain.handle('autopilot-stop', () => {
   stopAutopilotPayload();
+});
+
+let overlayWin = null;
+let isOverlayActive = false;
+let isOverlayInteractable = false;
+// Once the overlay has been started and then stopped, it cannot be
+// started again until the Electron app itself is fully closed and
+// relaunched. This lives only in memory for the life of the process,
+// so quitting and reopening the app naturally resets it to false.
+let overlaySessionLocked = false;
+
+function toggleOverlayInteractivity() {
+  if (!overlayWin || overlayWin.isDestroyed() || !overlayWin.isVisible()) return;
+  if (isOverlayInteractable) {
+    isOverlayInteractable = false;
+    OverlayController.focusTarget();
+    try { overlayWin.webContents.send('focus-change', false); } catch (e) { }
+  } else {
+    isOverlayInteractable = true;
+    OverlayController.activateOverlay();
+    try { overlayWin.webContents.send('focus-change', true); } catch (e) { }
+  }
+}
+
+ipcMain.handle('overlay-start', async (event, options = {}) => {
+  if (overlaySessionLocked) {
+    return {
+      success: false,
+      locked: true,
+      error: 'Overlay was already stopped once this session. Restart the app to use it again.'
+    };
+  }
+
+  try {
+    let title = (typeof options === 'string' ? options : options?.title) || 'GeoFS';
+    title = title.trim();
+
+    // Auto-resolve partial title match against active running windows
+    try {
+      if (process.platform === 'win32') {
+        const { stdout } = await execAsync('powershell -NoProfile -Command "Get-Process | Where-Object {$_.MainWindowTitle -ne \'\'} | Select-Object -ExpandProperty MainWindowTitle"');
+        const titles = stdout.split(/\r?\n/).map(t => t.trim()).filter(t => t.length > 0);
+        const matched = titles.find(t => t.toLowerCase().includes(title.toLowerCase()));
+        if (matched) {
+          title = matched;
+        }
+      }
+    } catch (err) { }
+
+    const callsign = typeof options === 'object' ? options?.callsign : '';
+    const url = `http://localhost:${SERVER_PORT}/overlay/overlay.html${callsign ? '?callsign=' + encodeURIComponent(callsign) : ''}`;
+
+    if (!overlayWin || overlayWin.isDestroyed()) {
+      overlayWin = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        ...OVERLAY_WINDOW_OPTS,
+        transparent: true,
+        frame: false,
+        show: false,
+        webPreferences: {
+          devTools: false,
+          nodeIntegration: false,
+          contextIsolation: true,
+          preload: path.join(__dirname, 'preload.js')
+        }
+      });
+
+      try {
+        overlayWin.webContents.openDevTools({ mode: 'detach', activate: false });
+      } catch (e) { }
+
+      overlayWin.on('blur', () => {
+        try {
+          isOverlayInteractable = false;
+          OverlayController.focusTarget();
+          if (overlayWin && !overlayWin.isDestroyed()) {
+            overlayWin.webContents.send('focus-change', false);
+          }
+        } catch (e) { }
+      });
+
+      // electron-overlay-window's native hook can force this window visible
+      // again to keep it synced with the target window (e.g. on the target
+      // regaining focus). Once the session is locked (overlay stopped), fight
+      // that by immediately re-hiding it rather than destroying the window.
+      overlayWin.on('show', () => {
+        if (overlaySessionLocked && overlayWin && !overlayWin.isDestroyed()) {
+          try { overlayWin.hide(); } catch (e) { }
+        }
+      });
+
+      overlayWin.on('closed', () => {
+        overlayWin = null;
+        isOverlayActive = false;
+        isOverlayInteractable = false;
+        overlaySessionLocked = true;
+        setOverlayWindow(null);
+      });
+    }
+
+    overlayWin.loadURL(url);
+    overlayWin.show();
+    OverlayController.attachByTitle(overlayWin, title, { hasTitleBarOnMac: true });
+    isOverlayActive = true;
+    isOverlayInteractable = false;
+    setOverlayWindow(overlayWin);
+
+    const toggleKey = 'CmdOrCtrl+Shift+O';
+    globalShortcut.unregister(toggleKey);
+    globalShortcut.register(toggleKey, () => {
+      toggleOverlayInteractivity();
+    });
+
+    return { success: true, title };
+  } catch (e) {
+    console.error('Error starting overlay:', e);
+    return { success: false, error: e.message };
+  }
+});
+
+ipcMain.handle('overlay-stop', () => {
+  try {
+    globalShortcut.unregister('CmdOrCtrl+Shift+O');
+    setOverlayWindow(null);
+    if (overlayWin && !overlayWin.isDestroyed()) {
+      try {
+        OverlayController.focusTarget();
+      } catch (e) { }
+      // Do NOT close()/destroy this window: electron-overlay-window's native
+      // addon holds a live OS-level hook on it, and destroying the window out
+      // from under that hook crashes the whole Electron process. hide() +
+      // ignoring mouse events is the safe way to make it disappear; the
+      // 'show' guard registered at window creation stops the hook from
+      // re-forcing it visible once the session is locked (see below).
+      try { overlayWin.setIgnoreMouseEvents(true, { forward: true }); } catch (e) { }
+      overlayWin.hide();
+    }
+    isOverlayActive = false;
+    isOverlayInteractable = false;
+    overlaySessionLocked = true;
+    return { success: true, locked: true };
+  } catch (e) {
+    console.error('Error stopping overlay:', e);
+    return { success: false, error: e.message };
+  }
+});
+
+ipcMain.handle('get-overlay-status', () => {
+  return {
+    active: isOverlayActive && !!(overlayWin && !overlayWin.isDestroyed() && overlayWin.isVisible()),
+    locked: overlaySessionLocked
+  };
+});
+
+ipcMain.handle('overlay-focus-target', () => {
+  try {
+    isOverlayInteractable = false;
+    OverlayController.focusTarget();
+    if (overlayWin && !overlayWin.isDestroyed()) {
+      overlayWin.webContents.send('focus-change', false);
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+});
+
+ipcMain.handle('overlay-activate', () => {
+  try {
+    isOverlayInteractable = true;
+    OverlayController.activateOverlay();
+    if (overlayWin && !overlayWin.isDestroyed()) {
+      overlayWin.webContents.send('focus-change', true);
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+});
+
+ipcMain.handle('overlay-toggle-interactive', () => {
+  toggleOverlayInteractivity();
+  return isOverlayInteractable;
+});
+
+ipcMain.handle('overlay-set-ignore-mouse-events', (event, ignore, options) => {
+  try {
+    if (overlayWin && !overlayWin.isDestroyed()) {
+      overlayWin.setIgnoreMouseEvents(ignore, options || {});
+    }
+    return true;
+  } catch (e) {
+    console.error('overlay-set-ignore-mouse-events error:', e);
+    return false;
+  }
+});
+
+ipcMain.handle('get-window-titles', async () => {
+  try {
+    if (process.platform === 'win32') {
+      const { stdout } = await execAsync('powershell -NoProfile -Command "Get-Process | Where-Object {$_.MainWindowTitle -ne \'\'} | Select-Object -ExpandProperty MainWindowTitle"');
+      const titles = stdout
+        .split(/\r?\n/)
+        .map(t => t.trim())
+        .filter(t => t.length > 0 && !t.includes('24Flight') && !t.includes('Task Manager'));
+      return Array.from(new Set(titles));
+    }
+  } catch (err) {
+    console.error('Error fetching window titles:', err);
+  }
+  return ['GeoFS', 'Roblox', 'Flight Simulator'];
 });

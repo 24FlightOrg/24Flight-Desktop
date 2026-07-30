@@ -7,6 +7,11 @@ let ws;
 let reconnectInterval;
 export let latestWorldState = { d: {}, s: new Date().toISOString() };
 
+let overlayWindow = null;
+export function setOverlayWindow(win) {
+    overlayWindow = win;
+}
+
 export function getCurrentWorldState() {
     return latestWorldState;
 }
@@ -105,6 +110,9 @@ export function initWS(mainWindow) {
 
                 if (mainWindow && !mainWindow.isDestroyed()) {
                     mainWindow.webContents.send('main-ws-message', str);
+                }
+                if (overlayWindow && !overlayWindow.isDestroyed() && overlayWindow.isVisible()) {
+                    overlayWindow.webContents.send('main-ws-message', str);
                 }
             } catch (err) {
                 console.error('WS | Error forwarding message:', err);
